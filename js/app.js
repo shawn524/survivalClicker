@@ -1,6 +1,6 @@
 // Survival Clicker
 // An incremental game with a post apocalyptic twist
-var version = 0.1;
+var version = 0.3;
 
 // Initialize values
 var playerAttributes = {
@@ -57,7 +57,7 @@ var rand = function(min, max) {
 // This function is the main click action. 
 // It can take all of the basic supplies you might find and return
 // a single random-weighted result as a loot drop. 
-var forage = function(basicSupplies, weight) {
+var gatherSupplies = function(basicSupplies, weight) {
     var total_weight = weight.reduce(function (prev, cur, i, arr) {
         return prev + cur;
     });
