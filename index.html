@@ -5,11 +5,11 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-	<h3>
-		Basic supplies:
-	</h3>
 	<table id="basicSuppliesCount">
 		<tbody>
+			<tr>
+				<td><h3>Basic supplies:</h3></td>
+			</tr>
 			<tr>
 				<td>Food:  <span id="food_count">0</span></td>
 			</tr>
@@ -30,6 +30,9 @@
 	<table id="playerAttributes">
 		<tbody>
 			<tr>
+				<td><h3>Player status:</h3></td>
+			</tr>
+			<tr>
 				<td>Health:  <span id="health_count">100</span></td>
 			</tr>
 			<tr>
@@ -40,6 +43,18 @@
 			</tr>
 			<tr>
 				<td>Rads:  <span id="rads_count">10</span></td>
+			</tr>
+			<tr>
+				<td><h4>Status effects:</h4></td>
+			</tr>
+			<tr>
+				<td><span class="hungry_status hidden" id="hungry_status"><em>Hungry</em></span></td>
+			</tr>
+			<tr>
+				<td><span class="thirsty_status hidden" id="thirsty_status"><em>Thirsty</em></span></td>
+			</tr>
+			<tr>
+				<td><span class="sick_status hidden" id="sick_status"><em>Sick</em></span></td>
 			</tr>
 		</tbody>
 	</table>

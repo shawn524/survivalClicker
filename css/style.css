@@ -17,3 +17,7 @@ table {
 	width: 140px;
 	margin-top: 30px;
 }
+
+.hidden {
+	display: none;
+}

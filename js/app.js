@@ -1,6 +1,6 @@
 // Survival Clicker
 // An incremental game with a post apocalyptic twist
-var version = 0.1
+var version = 0.1;
 
 // Initialize values
 var playerAttributes = {
@@ -61,22 +61,22 @@ var forage = function(basicSupplies, weight) {
     var total_weight = weight.reduce(function (prev, cur, i, arr) {
         return prev + cur;
     });
-    // console.log('total weight',total_weight)
+    // console.log('total weight',total_weight);
      
     var random_num = rand(0, total_weight);
-    // console.log('random num', random_num)
+    // console.log('random num', random_num);
     var weight_sum = 0;
      
     for (var i = 0; i < basicSupplies.length; i++) {
         weight_sum += weight[i];
-        // console.log(weight[i])
+        // console.log(weight[i]);
         weight_sum = +weight_sum.toFixed(2);
-        // console.log('weight sum',weight_sum)
-        var item_drop = basicSupplies[i]
+        // console.log('weight sum',weight_sum);
+        var item_drop = basicSupplies[i];
          
         if (random_num <= weight_sum) {
-        	item_drop.total++
-            console.log('found some',basicSupplies[i].name)
+        	item_drop.total++;
+            console.log('found some',basicSupplies[i].name);
             break;
         }
     }
@@ -97,7 +97,7 @@ function updateTotals() {
 	document.getElementById('thirst_count').innerHTML = playerAttributes.thirst.toFixed(0);
 	document.getElementById('rads_count').innerHTML = playerAttributes.rads.toFixed(0);
 
-}
+};
 
 function updatePlayerStatus() {
 	// Hunger
@@ -107,7 +107,7 @@ function updatePlayerStatus() {
 	} else if(playerAttributes.hunger >= 60){
 		playerAttributes.hungry = true;
 		playerAttributes.hunger += (1 * statusMultiplier);
-	}
+	};
 	// Thirst
 	if(playerAttributes.thirst < 60) {
 		playerAttributes.thirsty = false;
@@ -115,7 +115,7 @@ function updatePlayerStatus() {
 	} else if(playerAttributes.hunger >= 60){
 		playerAttributes.thirsty = true;
 		playerAttributes.thirst += (1 * statusMultiplier);
-	}
+	};
 	// Rad sickness
 	if(playerAttributes.rads < 100) {
 		playerAttributes.sick = false;
@@ -123,28 +123,48 @@ function updatePlayerStatus() {
 	} else if(playerAttributes.rads >= 100){
 		playerAttributes.sick = true;
 		playerAttributes.rads += (1 * statusMultiplier);
-	}
+	};
 }
 
 // Checks player condition and applies status modification
 function statusMultiplierFunc() {
 	// Status multiplier
+	// If none or one
 	if(!playerAttributes.hungry || !playerAttributes.thirsty || !playerAttributes.sick) {
 		statusMultiplier = 1.0;
-	} 
+	}
 	if(playerAttributes.hungry || playerAttributes.thirsty || playerAttributes.sick) {
 		statusMultiplier = 1.5;
-	} 
+	};
+	// If any two
 	if(playerAttributes.hungry && playerAttributes.thirsty) {
 		statusMultiplier = 3.0;
 	} else if(playerAttributes.hungry && playerAttributes.sick){
 		statusMultiplier = 3.0;
 	} else if(playerAttributes.thirsty && playerAttributes.sick){
 		statusMultiplier = 3.0;
-	}
+	};
+	// If three
 	if(playerAttributes.hungry && playerAttributes.thirsty && playerAttributes.sick) {
 		statusMultiplier = 4.5;
-	}
+	};
+
+	// Display to player
+	if(playerAttributes.hungry) {
+		document.getElementById('hungry_status').className = "hungry_status";
+	} else {
+		document.getElementById('hungry_status').className += " hidden";		
+	};
+	if(playerAttributes.thirsty) {
+		document.getElementById('thirsty_status').className = "thirsty_status";
+	} else {
+		document.getElementById('thirsty_status').className += " hidden";		
+	};
+	if(playerAttributes.sick) {
+		document.getElementById('sick_status').className = "sick_status";
+	} else {
+		document.getElementById('sick_status').className += " hidden";		
+	};
 }
 
 
