@@ -7,7 +7,8 @@ var playerAttributes = {
 	'name': 'Pip',
 	'health': 100,
 	'hunger': 0,
-	'thirst': 0
+	'thirst': 0,
+	'rads': 10
 }
 var food = {
 	name:'food',
@@ -48,6 +49,9 @@ var rand = function(min, max) {
     return Math.random() * (max - min) + min;
 };
  
+// This function is the main click action. 
+// It can take all of the basic supplies you might find and return
+// a single random-weighted result as a loot drop. 
 var forage = function(basicSupplies, weight) {
     var total_weight = weight.reduce(function (prev, cur, i, arr) {
         return prev + cur;
@@ -71,10 +75,30 @@ var forage = function(basicSupplies, weight) {
             break;
         }
     }
-     
+    updateTotals()
+};
+
+function updateTotals() {
+	// Supplies
     document.getElementById('food_count').innerHTML = food.total;
 	document.getElementById('water_count').innerHTML = water.total;
 	document.getElementById('ammo_count').innerHTML = ammo.total;
 	document.getElementById('scrap_metal_count').innerHTML = scrapMetal.total;
-	document.getElementById('medical_supplies_count').innerHTML = medicalSupplies.total;
-};
+	document.getElementById('medical_supplies_count').innerHTML = medicalSupplies.total;	
+	// Attributes
+	document.getElementById('health_count').innerHTML = playerAttributes.health;	
+	document.getElementById('hunger_count').innerHTML = playerAttributes.hunger;
+	document.getElementById('thirst_count').innerHTML = playerAttributes.thirst;
+	document.getElementById('rads_count').innerHTML = playerAttributes.rads;
+
+}
+
+
+
+
+// Main timer function
+window.setInterval(function(){
+
+
+	updateTotals()
+}, 1000);
