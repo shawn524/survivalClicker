@@ -7,8 +7,13 @@ var playerAttributes = {
 	'name': 'Pip',
 	'health': 100,
 	'hunger': 0,
+	'hungry': false,
+	'starving': false,
 	'thirst': 0,
-	'rads': 10
+	'thirsty': false,
+	'dehydrated': false,
+	'rads': 10,
+	'sick': false
 }
 var food = {
 	name:'food',
@@ -41,9 +46,9 @@ var medicalSupplies = {
 	chance:0.1
 };
 
-
 var basicSupplies = [food, water, ammo, scrapMetal, medicalSupplies];
 var weight = [food.chance, water.chance, ammo.chance, scrapMetal.chance, medicalSupplies.chance];
+var statusMultiplier = 1;
 
 var rand = function(min, max) {
     return Math.random() * (max - min) + min;
@@ -75,30 +80,59 @@ var forage = function(basicSupplies, weight) {
             break;
         }
     }
-    updateTotals()
+    updateTotals();
+    updatePlayerStatus();
 };
 
 function updateTotals() {
 	// Supplies
-    document.getElementById('food_count').innerHTML = food.total;
-	document.getElementById('water_count').innerHTML = water.total;
-	document.getElementById('ammo_count').innerHTML = ammo.total;
-	document.getElementById('scrap_metal_count').innerHTML = scrapMetal.total;
-	document.getElementById('medical_supplies_count').innerHTML = medicalSupplies.total;	
+    document.getElementById('food_count').innerHTML = food.total.toFixed(0);
+	document.getElementById('water_count').innerHTML = water.total.toFixed(0);
+	document.getElementById('ammo_count').innerHTML = ammo.total.toFixed(0);
+	document.getElementById('scrap_metal_count').innerHTML = scrapMetal.total.toFixed(0);
+	document.getElementById('medical_supplies_count').innerHTML = medicalSupplies.total.toFixed(0);
 	// Attributes
-	document.getElementById('health_count').innerHTML = playerAttributes.health;	
-	document.getElementById('hunger_count').innerHTML = playerAttributes.hunger;
-	document.getElementById('thirst_count').innerHTML = playerAttributes.thirst;
-	document.getElementById('rads_count').innerHTML = playerAttributes.rads;
+	document.getElementById('health_count').innerHTML = playerAttributes.health.toFixed(0);	
+	document.getElementById('hunger_count').innerHTML = playerAttributes.hunger.toFixed(0);
+	document.getElementById('thirst_count').innerHTML = playerAttributes.thirst.toFixed(0);
+	document.getElementById('rads_count').innerHTML = playerAttributes.rads.toFixed(0);
 
 }
 
+function updatePlayerStatus() {
+	// Hunger
+	if(playerAttributes.hunger < 60) {
+		playerAttributes.hungry = false;
+		playerAttributes.hunger += (1 * statusMultiplier);
+	} else if(playerAttributes.hunger >= 60){
+		playerAttributes.hungry = true;
+		playerAttributes.hunger += (1 * statusMultiplier);
+	}
+}
 
+// Checks player condition and applies status modification
+function statusMultiplierFunc() {
+	// Status multiplier
+	if(playerAttributes.hungry || playerAttributes.thirsty || playerAttributes.sick) {
+		statusMultiplier = 1.5;
+	} 
+	if(playerAttributes.hungry && playerAttributes.thirsty) {
+		statusMultiplier = 3.0;
+	} else if(playerAttributes.hungry && playerAttributes.sick){
+		statusMultiplier = 3.0;
+	} else if(playerAttributes.thirsty && playerAttributes.sick){
+		statusMultiplier = 3.0;
+	}
+	if(playerAttributes.hungry && playerAttributes.thirsty && playerAttributes.sick) {
+		statusMultiplier = 4.5;
+	}
+}
 
 
 // Main timer function
 window.setInterval(function(){
-
-
-	updateTotals()
+	statusMultiplierFunc()
+	console.log('multi', statusMultiplier)
+	// updatePlayerStatus();
+	updateTotals();
 }, 1000);
