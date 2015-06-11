@@ -3,18 +3,18 @@
 An incremental game with a post apocalyptic twist
 
 ## Things to add:
-~~  - Forage~~
-~~    - Ammo~~
-~~    - Food~~
-~~    - Water~~
-~~    - Medical supplies~~
-~~    - Scrap metal~~
+- ~~Forage~~
+    - ~~Ammo~~
+    - ~~Food~~
+    - ~~Water~~
+    - ~~Medical supplies~~
+    - ~~Scrap metal~~
 
-~~  - Attributes~~
-~~    - Health~~
-~~    - Hunger~~
-~~    - Thirst~~
-~~    - Rad exposure~~
+- ~~Attributes~~
+  - ~~Health~~
+  - ~~Hunger~~
+  - ~~Thirst~~
+  - ~~Rad exposure~~
   - Structure integrity
   - Fear?
 
