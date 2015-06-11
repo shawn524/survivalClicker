@@ -108,11 +108,30 @@ function updatePlayerStatus() {
 		playerAttributes.hungry = true;
 		playerAttributes.hunger += (1 * statusMultiplier);
 	}
+	// Thirst
+	if(playerAttributes.thirst < 60) {
+		playerAttributes.thirsty = false;
+		playerAttributes.thirst += (1 * statusMultiplier);
+	} else if(playerAttributes.hunger >= 60){
+		playerAttributes.thirsty = true;
+		playerAttributes.thirst += (1 * statusMultiplier);
+	}
+	// Rad sickness
+	if(playerAttributes.rads < 100) {
+		playerAttributes.sick = false;
+		playerAttributes.rads += (1 * statusMultiplier);
+	} else if(playerAttributes.rads >= 100){
+		playerAttributes.sick = true;
+		playerAttributes.rads += (1 * statusMultiplier);
+	}
 }
 
 // Checks player condition and applies status modification
 function statusMultiplierFunc() {
 	// Status multiplier
+	if(!playerAttributes.hungry || !playerAttributes.thirsty || !playerAttributes.sick) {
+		statusMultiplier = 1.0;
+	} 
 	if(playerAttributes.hungry || playerAttributes.thirsty || playerAttributes.sick) {
 		statusMultiplier = 1.5;
 	} 
