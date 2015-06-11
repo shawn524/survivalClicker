@@ -3,6 +3,12 @@
 var version = 0.1
 
 // Initialize values
+var playerAttributes = {
+	'name': 'Pip',
+	'health': 100,
+	'hunger': 0,
+	'thirst': 0
+}
 var food = {
 	name:'food',
 	total:0,
@@ -61,7 +67,7 @@ var forage = function(basicSupplies, weight) {
          
         if (random_num <= weight_sum) {
         	item_drop.total++
-            console.log(basicSupplies[i].name)
+            console.log('found some',basicSupplies[i].name)
             break;
         }
     }
