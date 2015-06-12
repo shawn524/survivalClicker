@@ -33,23 +33,24 @@ var ammo = {
 	increment:1,
 	chance:0.2
 };
-var scrapMetal = {
-	name:'scrap metal',
+var scrap = {
+	name:'scrap',
 	total:0,
 	increment:1,
 	chance:0.2
 };
-var medicalSupplies = {
-	name:'medical supplies',
+var medpack = {
+	name:'medpack',
 	total:0,
 	increment:1,
 	chance:0.1
 };
 
-var basicSupplies = [food, water, ammo, scrapMetal, medicalSupplies];
-var weight = [food.chance, water.chance, ammo.chance, scrapMetal.chance, medicalSupplies.chance];
+var basicSupplies = [food, water, ammo, scrap, medpack];
+var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance];
 var statusMultiplier = 1;
 
+// Generates a random number between min and max.
 var rand = function(min, max) {
     return Math.random() * (max - min) + min;
 };
@@ -89,8 +90,8 @@ function updateTotals() {
     document.getElementById('food_count').innerHTML = food.total.toFixed(0);
 	document.getElementById('water_count').innerHTML = water.total.toFixed(0);
 	document.getElementById('ammo_count').innerHTML = ammo.total.toFixed(0);
-	document.getElementById('scrap_metal_count').innerHTML = scrapMetal.total.toFixed(0);
-	document.getElementById('medical_supplies_count').innerHTML = medicalSupplies.total.toFixed(0);
+	document.getElementById('scrap_metal_count').innerHTML = scrap.total.toFixed(0);
+	document.getElementById('medical_supplies_count').innerHTML = medpack.total.toFixed(0);
 	// Attributes
 	document.getElementById('health_count').innerHTML = playerAttributes.health.toFixed(0);	
 	document.getElementById('hunger_count').innerHTML = playerAttributes.hunger.toFixed(0);
@@ -167,11 +168,27 @@ function statusMultiplierFunc() {
 	};
 }
 
+function useItem(item) {
+	if(item.total > 0) {
+		item.total -= 1;
+		if(item.name == 'medpack') {
+			playerAttributes.health += 20;
+			playerAttributes.rads -= 20;
+		} else if(item.name == 'food') {
+			playerAttributes.hunger -= 10;
+		} else if(item.name == 'water') {
+			playerAttributes.thirst -= 12;
+		}
+	} else {
+		console.log('Not enough', item.name);
+	}
+}
+
 
 // Main timer function
 window.setInterval(function(){
 	statusMultiplierFunc()
+	updateTotals();
 	console.log('multi', statusMultiplier)
 	// updatePlayerStatus();
-	updateTotals();
 }, 1000);

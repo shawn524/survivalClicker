@@ -59,9 +59,12 @@
 		</tbody>
 	</table>
 
-	<div>	
-		<button class="button" id="forage" onclick="gatherSupplies(basicSupplies, weight)"><strong>Gather supplies</strong></button>
+	<div class="controls">
+		<button class="button" id="medpack_button" onclick="useItem(medpack)">Medpack</button>
+		<button class="button" id="food_button" onclick="useItem(food)">Eat</button>
+		<button class="button" id="water_button" onclick="useItem(water)">Drink</button>
 	</div>
+		<button class="button" id="gather_button" onclick="gatherSupplies(basicSupplies, weight)"><strong>Gather supplies</strong></button>
 <script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>

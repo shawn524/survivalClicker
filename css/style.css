@@ -10,12 +10,17 @@ table {
 	width: 50%;
 }
 
-#forage {
-	height: 40px;
-	width: 60%;
-	margin: 30px 15% 0;
-}
 
 .hidden {
 	display: none;
+}
+
+.controls {
+	margin: 0 30%;
+}
+
+#gather_button {
+	height: 40px;
+	width: 60%;
+	margin: 30px 15% 0;
 }
