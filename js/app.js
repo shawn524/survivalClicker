@@ -98,7 +98,22 @@ function updateTotals() {
 	document.getElementById('thirst_count').innerHTML = playerAttributes.thirst.toFixed(0);
 	document.getElementById('rads_count').innerHTML = playerAttributes.rads.toFixed(0);
 
+	// Player stats limiter
+	if(playerAttributes.health >= 100) {
+		playerAttributes.health = 100;
+	}
+	if(playerAttributes.hunger >= 100) {
+		playerAttributes.hunger = 100;
+	}
+	if(playerAttributes.thirst >= 100) {
+		playerAttributes.thirst = 100;
+	}
+	if(playerAttributes.rads >= 200) {
+		playerAttributes.rads = 200;
+	}
+
 };
+
 
 function updatePlayerStatus() {
 	// Hunger
@@ -112,7 +127,7 @@ function updatePlayerStatus() {
 	} else if(playerAttributes.hunger >= 100) {
 		playerAttributes.hungry = false;
 		playerAttributes.starving = true;
-	}
+	};
 	// Thirst
 	if(playerAttributes.thirst < 60) {
 		playerAttributes.thirsty = false;
@@ -124,7 +139,7 @@ function updatePlayerStatus() {
 	} else if(playerAttributes.thirst >= 100) {
 		playerAttributes.thirsty = false;
 		playerAttributes.dehydrated = true;
-	}
+	};
 	// Rad sickness
 	if(playerAttributes.rads < 100) {
 		playerAttributes.sick = false;
@@ -134,8 +149,8 @@ function updatePlayerStatus() {
 		// playerAttributes.rads += (1 * statusMultiplier);
 	} else if(playerAttributes.rads == 200) {
 		// Kill player
-	}
-}
+	};
+};
 
 // Checks player condition and applies status modification
 function statusMultiplierFunc() {
