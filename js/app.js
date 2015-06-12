@@ -119,11 +119,11 @@ function updatePlayerStatus() {
 	// Hunger
 	if(playerAttributes.hunger < 60) {
 		playerAttributes.hungry = false;
-		// playerAttributes.hunger += (1 * statusMultiplier);
-	} else if(playerAttributes.hunger >= 60 && playerAttributes.hunger < 100){
-		playerAttributes.hungry = true;
 		playerAttributes.starving = false;
-		// playerAttributes.hunger += (1 * statusMultiplier);
+		playerAttributes.hunger += (1 * statusMultiplier);
+	} else if((playerAttributes.hunger >= 60 && playerAttributes.hunger < 100) && !playerAttributes.starving) {
+		playerAttributes.hungry = true;
+		playerAttributes.hunger += (1 * statusMultiplier);
 	} else if(playerAttributes.hunger >= 100) {
 		playerAttributes.hungry = false;
 		playerAttributes.starving = true;
@@ -131,11 +131,11 @@ function updatePlayerStatus() {
 	// Thirst
 	if(playerAttributes.thirst < 60) {
 		playerAttributes.thirsty = false;
-		// playerAttributes.thirst += (1 * statusMultiplier);
-	} else if(playerAttributes.thirst >= 60 && playerAttributes.thirst < 100){
-		playerAttributes.thirsty = true;
 		playerAttributes.dehydrated = false;
-		// playerAttributes.thirst += (1 * statusMultiplier);
+		playerAttributes.thirst += (1 * statusMultiplier);
+	} else if((playerAttributes.thirst >= 60 && playerAttributes.thirst < 100) && !playerAttributes.dehydrated) {
+		playerAttributes.thirsty = true;
+		playerAttributes.thirst += (1 * statusMultiplier);
 	} else if(playerAttributes.thirst >= 100) {
 		playerAttributes.thirsty = false;
 		playerAttributes.dehydrated = true;
@@ -143,10 +143,10 @@ function updatePlayerStatus() {
 	// Rad sickness
 	if(playerAttributes.rads < 100) {
 		playerAttributes.sick = false;
-		// playerAttributes.rads += (1 * statusMultiplier);
+		playerAttributes.rads += (1 * statusMultiplier);
 	} else if(playerAttributes.rads >= 100){
 		playerAttributes.sick = true;
-		// playerAttributes.rads += (1 * statusMultiplier);
+		playerAttributes.rads += (1 * statusMultiplier);
 	} else if(playerAttributes.rads == 200) {
 		// Kill player
 	};
