@@ -48,7 +48,8 @@ var medpack = {
 
 var basicSupplies = [food, water, ammo, scrap, medpack];
 var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance];
-var statusMultiplier = 1;
+var lesserMulti = 1;
+var daysSurvived = 0;
 
 // Generates a random number between min and max.
 var rand = function(min, max) {
@@ -81,9 +82,20 @@ var gatherSupplies = function(basicSupplies, weight) {
             break;
         }
     }
+
+    daysSurvived += 0.1;
+    // Apply certain functions when button pressed
     updateTotals();
-    updatePlayerStatus();
+    applyStatusEffect();
+    playerStatsRemoval();
+	
 };
+
+function playerStatsRemoval() {
+	playerAttributes.hunger += (1 * lesserMulti);
+	playerAttributes.thirst += (1 * lesserMulti);
+	playerAttributes.rads += (1 * lesserMulti);
+}
 
 function updateTotals() {
 	// Supplies
@@ -97,7 +109,12 @@ function updateTotals() {
 	document.getElementById('hunger_count').innerHTML = playerAttributes.hunger.toFixed(0);
 	document.getElementById('thirst_count').innerHTML = playerAttributes.thirst.toFixed(0);
 	document.getElementById('rads_count').innerHTML = playerAttributes.rads.toFixed(0);
+	// Days survived rounded down
+	document.getElementById('days_survived_count').innerHTML = Math.floor(daysSurvived).toFixed(0);
 
+};
+
+function statsLimiter() {
 	// Player stats limiter
 	if(playerAttributes.health >= 100) {
 		playerAttributes.health = 100;
@@ -111,19 +128,15 @@ function updateTotals() {
 	if(playerAttributes.rads >= 200) {
 		playerAttributes.rads = 200;
 	}
+}
 
-};
-
-
-function updatePlayerStatus() {
-	// Hunger
+function applyStatusEffect() {
+// Hunger
 	if(playerAttributes.hunger < 60) {
 		playerAttributes.hungry = false;
 		playerAttributes.starving = false;
-		playerAttributes.hunger += (1 * statusMultiplier);
 	} else if((playerAttributes.hunger >= 60 && playerAttributes.hunger < 100) && !playerAttributes.starving) {
 		playerAttributes.hungry = true;
-		playerAttributes.hunger += (1 * statusMultiplier);
 	} else if(playerAttributes.hunger >= 100) {
 		playerAttributes.hungry = false;
 		playerAttributes.starving = true;
@@ -132,10 +145,8 @@ function updatePlayerStatus() {
 	if(playerAttributes.thirst < 60) {
 		playerAttributes.thirsty = false;
 		playerAttributes.dehydrated = false;
-		playerAttributes.thirst += (1 * statusMultiplier);
 	} else if((playerAttributes.thirst >= 60 && playerAttributes.thirst < 100) && !playerAttributes.dehydrated) {
 		playerAttributes.thirsty = true;
-		playerAttributes.thirst += (1 * statusMultiplier);
 	} else if(playerAttributes.thirst >= 100) {
 		playerAttributes.thirsty = false;
 		playerAttributes.dehydrated = true;
@@ -143,37 +154,35 @@ function updatePlayerStatus() {
 	// Rad sickness
 	if(playerAttributes.rads < 100) {
 		playerAttributes.sick = false;
-		playerAttributes.rads += (1 * statusMultiplier);
-	} else if(playerAttributes.rads >= 100){
+	} else if(playerAttributes.rads >= 100 && playerAttributes.rads < 200){
 		playerAttributes.sick = true;
-		playerAttributes.rads += (1 * statusMultiplier);
 	} else if(playerAttributes.rads == 200) {
-		// Kill player
+		playerAttributes.health = 0;
 	};
 };
 
 // Checks player condition and applies status modification
-function statusMultiplierFunc() {
+function statusMulti() {
 	// Status multiplier
 	// Lesser status effects
 	// If none or one 
 	if(!playerAttributes.hungry && !playerAttributes.thirsty && !playerAttributes.sick) {
-		statusMultiplier = 1.0;
+		lesserMulti = 1.0;
 	}
 	if(playerAttributes.hungry || playerAttributes.thirsty || playerAttributes.sick) {
-		statusMultiplier = 1.5;
+		lesserMulti = 1.5;
 	};
 	// If any two
 	if(playerAttributes.hungry && playerAttributes.thirsty) {
-		statusMultiplier = 3.0;
+		lesserMulti = 3.0;
 	} else if(playerAttributes.hungry && playerAttributes.sick){
-		statusMultiplier = 3.0;
+		lesserMulti = 3.0;
 	} else if(playerAttributes.thirsty && playerAttributes.sick){
-		statusMultiplier = 3.0;
+		lesserMulti = 3.0;
 	};
 	// If three
 	if(playerAttributes.hungry && playerAttributes.thirsty && playerAttributes.sick) {
-		statusMultiplier = 4.5;
+		lesserMulti = 4.5;
 	};
 
 	// Display to player
@@ -207,6 +216,7 @@ function statusMultiplierFunc() {
 	};
 }
 
+// Item usage
 function useItem(item) {
 	if(item.total > 0) {
 		item.total -= 1;
@@ -226,8 +236,9 @@ function useItem(item) {
 
 // Main timer function
 window.setInterval(function(){
-	statusMultiplierFunc()
+	statsLimiter();
+	statusMulti();
 	updateTotals();
-	console.log('multi', statusMultiplier)
-	// updatePlayerStatus();
+	applyStatusEffect();
+	console.log('multi', lesserMulti)
 }, 1000);

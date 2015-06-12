@@ -5,6 +5,9 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
+	<div>
+		<h4>Days survived:  <span id="days_survived_count">0</span></h4>
+	</div>
 	<table id="basicSuppliesCount">
 		<tbody>
 			<tr>
@@ -66,12 +69,12 @@
 		</tbody>
 	</table>
 
+	<button class="button" id="gather_button" onclick="gatherSupplies(basicSupplies, weight)"><strong>Gather supplies</strong></button>
 	<div class="controls">
 		<button class="button" id="medpack_button" onclick="useItem(medpack)">Medpack</button>
 		<button class="button" id="food_button" onclick="useItem(food)">Eat</button>
 		<button class="button" id="water_button" onclick="useItem(water)">Drink</button>
 	</div>
-		<button class="button" id="gather_button" onclick="gatherSupplies(basicSupplies, weight)"><strong>Gather supplies</strong></button>
 <script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>
