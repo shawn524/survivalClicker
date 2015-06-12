@@ -104,34 +104,45 @@ function updatePlayerStatus() {
 	// Hunger
 	if(playerAttributes.hunger < 60) {
 		playerAttributes.hungry = false;
-		playerAttributes.hunger += (1 * statusMultiplier);
-	} else if(playerAttributes.hunger >= 60){
+		// playerAttributes.hunger += (1 * statusMultiplier);
+	} else if(playerAttributes.hunger >= 60 && playerAttributes.hunger < 100){
 		playerAttributes.hungry = true;
-		playerAttributes.hunger += (1 * statusMultiplier);
-	};
+		playerAttributes.starving = false;
+		// playerAttributes.hunger += (1 * statusMultiplier);
+	} else if(playerAttributes.hunger >= 100) {
+		playerAttributes.hungry = false;
+		playerAttributes.starving = true;
+	}
 	// Thirst
 	if(playerAttributes.thirst < 60) {
 		playerAttributes.thirsty = false;
-		playerAttributes.thirst += (1 * statusMultiplier);
-	} else if(playerAttributes.hunger >= 60){
+		// playerAttributes.thirst += (1 * statusMultiplier);
+	} else if(playerAttributes.thirst >= 60 && playerAttributes.thirst < 100){
 		playerAttributes.thirsty = true;
-		playerAttributes.thirst += (1 * statusMultiplier);
-	};
+		playerAttributes.dehydrated = false;
+		// playerAttributes.thirst += (1 * statusMultiplier);
+	} else if(playerAttributes.thirst >= 100) {
+		playerAttributes.thirsty = false;
+		playerAttributes.dehydrated = true;
+	}
 	// Rad sickness
 	if(playerAttributes.rads < 100) {
 		playerAttributes.sick = false;
-		playerAttributes.rads += (1 * statusMultiplier);
+		// playerAttributes.rads += (1 * statusMultiplier);
 	} else if(playerAttributes.rads >= 100){
 		playerAttributes.sick = true;
-		playerAttributes.rads += (1 * statusMultiplier);
-	};
+		// playerAttributes.rads += (1 * statusMultiplier);
+	} else if(playerAttributes.rads == 200) {
+		// Kill player
+	}
 }
 
 // Checks player condition and applies status modification
 function statusMultiplierFunc() {
 	// Status multiplier
-	// If none or one
-	if(!playerAttributes.hungry || !playerAttributes.thirsty || !playerAttributes.sick) {
+	// Lesser status effects
+	// If none or one 
+	if(!playerAttributes.hungry && !playerAttributes.thirsty && !playerAttributes.sick) {
 		statusMultiplier = 1.0;
 	}
 	if(playerAttributes.hungry || playerAttributes.thirsty || playerAttributes.sick) {
@@ -151,20 +162,33 @@ function statusMultiplierFunc() {
 	};
 
 	// Display to player
+	// Hunger
 	if(playerAttributes.hungry) {
 		document.getElementById('hungry_status').className = "hungry_status";
+		document.getElementById('starving_status').className += " hidden";
+	} else if(playerAttributes.starving) {
+		document.getElementById('starving_status').className = "starving_status";
+		document.getElementById('hungry_status').className += " hidden";
 	} else {
-		document.getElementById('hungry_status').className += " hidden";		
+		document.getElementById('hungry_status').className += " hidden";
+		document.getElementById('starving_status').className += " hidden";
 	};
+	// Thirst
 	if(playerAttributes.thirsty) {
 		document.getElementById('thirsty_status').className = "thirsty_status";
+		document.getElementById('dehydrated_status').className += " hidden";
+	} else if(playerAttributes.dehydrated) {
+		document.getElementById('dehydrated_status').className = "dehydrated_status";
+		document.getElementById('thirsty_status').className += " hidden";
 	} else {
-		document.getElementById('thirsty_status').className += " hidden";		
+		document.getElementById('thirsty_status').className += " hidden";
+		document.getElementById('dehydrated_status').className += " hidden";
 	};
+	// Rad sickness
 	if(playerAttributes.sick) {
 		document.getElementById('sick_status').className = "sick_status";
 	} else {
-		document.getElementById('sick_status').className += " hidden";		
+		document.getElementById('sick_status').className += " hidden";
 	};
 }
 
