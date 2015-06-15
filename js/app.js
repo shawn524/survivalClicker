@@ -1,6 +1,6 @@
 // Survival Clicker
 // An incremental game with a post apocalyptic twist
-var version = 0.3;
+var version = 0.4;
 
 // Initialize values
 var playerAttributes = {
@@ -13,7 +13,8 @@ var playerAttributes = {
 	'thirsty': false,
 	'dehydrated': false,
 	'rads': 10,
-	'sick': false
+	'sick': false,
+	'gameOver': false
 }
 var food = {
 	name:'food',
@@ -88,6 +89,7 @@ var gatherSupplies = function(basicSupplies, weight) {
     updateTotals();
     applyStatusEffect();
     playerStatsRemoval();
+    deathCheck();
 	
 };
 
@@ -95,6 +97,14 @@ function playerStatsRemoval() {
 	playerAttributes.hunger += (1 * lesserMulti);
 	playerAttributes.thirst += (1 * lesserMulti);
 	playerAttributes.rads += (1 * lesserMulti);
+}
+
+function deathCheck() {
+	if(playerAttributes.health == 0 && !playerAttributes.gameOver) {
+		alert("You have succumbed to deaths cold embrace. Your journey has ended.")
+		playerAttributes.gameOver = true;
+		// reset game
+	}
 }
 
 function updateTotals() {
@@ -240,5 +250,6 @@ window.setInterval(function(){
 	statusMulti();
 	updateTotals();
 	applyStatusEffect();
+	deathCheck();
 	console.log('multi', lesserMulti)
 }, 1000);
