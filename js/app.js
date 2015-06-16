@@ -100,6 +100,13 @@ function playerStatsRemoval() {
 	playerAttributes.hunger += (1 * lesserMulti * greaterMulti);
 	playerAttributes.thirst += (1 * lesserMulti * greaterMulti);
 	playerAttributes.rads += (1 * lesserMulti * greaterMulti);
+	// Health removal
+	if(playerAttributes.hungry || playerAttributes.thirsty || playerAttributes.sick) {
+		playerAttributes.health -= (1 * lesserMulti * greaterMulti);
+	}
+	if(playerAttributes.starving || playerAttributes.dehydrated) {
+		playerAttributes.health -= (1 * lesserMulti * greaterMulti);	
+	}
 }
 
 function deathCheck() {
@@ -140,6 +147,18 @@ function statsLimiter() {
 	}
 	if(playerAttributes.rads >= 200) {
 		playerAttributes.rads = 200;
+	}
+	if(playerAttributes.health <= 0) {
+		playerAttributes.health = 0;
+	}
+	if(playerAttributes.hunger <= 0) {
+		playerAttributes.hunger = 0;
+	}
+	if(playerAttributes.thirst <= 0) {
+		playerAttributes.thirst = 0;
+	}
+	if(playerAttributes.rads <= 0) {
+		playerAttributes.rads = 0;
 	}
 }
 
