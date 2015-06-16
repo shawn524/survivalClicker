@@ -5,76 +5,103 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-	<div>
-		<h4>Days survived:  <span id="days_survived_count">0</span></h4>
-	</div>
-	<table id="basicSuppliesCount">
-		<tbody>
-			<tr>
-				<td><h3>Basic supplies:</h3></td>
-			</tr>
-			<tr>
-				<td>Food:  <span id="food_count">0</span></td>
-			</tr>
-			<tr>
-				<td>Water:  <span id="water_count">0</span></td>
-			</tr>
-			<tr>
-				<td>Ammo:  <span id="ammo_count">0</span></td>
-			</tr>
-			<tr>
-				<td>Scrap metal:  <span id="scrap_metal_count">0</span></td>
-			</tr>
-			<tr>
-				<td>Medical supplies:  <span id="medical_supplies_count">0</span></td>
-			</tr>
-		</tbody>
-	</table>
-	<table id="playerAttributes">
-		<tbody>
-			<tr>
-				<td><h3>Player status:</h3></td>
-			</tr>
-			<tr>
-				<td>Health:  <span id="health_count">100</span></td>
-			</tr>
-			<tr>
-				<td>Hunger:  <span id="hunger_count">0</span></td>
-			</tr>
-			<tr>
-				<td>Thirst:  <span id="thirst_count">0</span></td>
-			</tr>
-			<tr>
-				<td>Rads:  <span id="rads_count">10</span></td>
-			</tr>
-			<tr>
-				<td><h4>Status effects:</h4></td>
-			</tr>
-			<!-- Status effects -->
-			<tr>
-				<td><span class="hungry_status hidden" id="hungry_status"><em>Hungry</em></span></td>
-			</tr>
-			<tr>
-				<td><span class="starving_status hidden" id="starving_status"><em>Starving</em></span></td>
-			</tr>
-			<tr>
-				<td><span class="thirsty_status hidden" id="thirsty_status"><em>Thirsty</em></span></td>
-			</tr>
-			<tr>
-				<td><span class="dehydrated_status hidden" id="dehydrated_status"><em>Dehydrated</em></span></td>
-			</tr>
-			<tr>
-				<td><span class="sick_status hidden" id="sick_status"><em>Sick</em></span></td>
-			</tr>
-		</tbody>
-	</table>
-
-	<button class="button" id="gather_button" onclick="gatherSupplies(basicSupplies, weight)"><strong>Gather supplies</strong></button>
-	<div class="controls">
-		<button class="button" id="medpack_button" onclick="useItem(medpack)">Medpack</button>
-		<button class="button" id="food_button" onclick="useItem(food)">Eat</button>
-		<button class="button" id="water_button" onclick="useItem(water)">Drink</button>
-	</div>
+	<div id="main_body">
+		<div>
+			<h4>Days survived:  <span id="days_survived_count">0</span></h4>
+		</div>
+		<table id="basicSuppliesCount">
+			<tbody>
+				<tr>
+					<td><h3>Basic supplies:</h3></td>
+				</tr>
+				<tr>
+					<td>Food:  <span id="food_count">0</span></td>
+				</tr>
+				<tr>
+					<td>Water:  <span id="water_count">0</span></td>
+				</tr>
+				<tr>
+					<td>Ammo:  <span id="ammo_count">0</span></td>
+				</tr>
+				<tr>
+					<td>Scrap metal:  <span id="scrap_metal_count">0</span></td>
+				</tr>
+				<tr>
+					<td>Medical supplies:  <span id="medical_supplies_count">0</span></td>
+				</tr>
+			</tbody>
+		</table>
+		<table id="playerAttributes">
+			<tbody>
+				<tr>
+					<td><h3>Player status:</h3></td>
+				</tr>
+				<tr>
+					<td>Health:  <span id="health_count">100</span></td>
+				</tr>
+				<tr>
+					<td>Hunger:  <span id="hunger_count">0</span></td>
+				</tr>
+				<tr>
+					<td>Thirst:  <span id="thirst_count">0</span></td>
+				</tr>
+				<tr>
+					<td>Rads:  <span id="rads_count">10</span></td>
+				</tr>
+				<tr>
+					<td><h4>Status effects:</h4></td>
+				</tr>
+				<!-- Status effects -->
+				<tr>
+					<td><span class="hungry_status hidden" id="hungry_status"><em>Hungry</em></span></td>
+				</tr>
+				<tr>
+					<td><span class="starving_status hidden" id="starving_status"><em>Starving</em></span></td>
+				</tr>
+				<tr>
+					<td><span class="thirsty_status hidden" id="thirsty_status"><em>Thirsty</em></span></td>
+				</tr>
+				<tr>
+					<td><span class="dehydrated_status hidden" id="dehydrated_status"><em>Dehydrated</em></span></td>
+				</tr>
+				<tr>
+					<td><span class="sick_status hidden" id="sick_status"><em>Sick</em></span></td>
+				</tr>
+			</tbody>
+		</table>
+	
+		<button class="button" id="gather_button" onclick="gatherSupplies(basicSupplies, weight)"><strong>Gather supplies</strong></button>
+		<div class="controls">
+			<button class="button" id="medpack_button" onclick="useItem(medpack)">Medpack</button>
+			<button class="button" id="food_button" onclick="useItem(food)">Eat</button>
+			<button class="button" id="water_button" onclick="useItem(water)">Drink</button>
+		</div>
+	</div> <!-- End main body -->
+	<div id="game_console"> <!-- In game log messages -->
+		<h3>Events</h3>
+        <table id="logTable">
+            <tbody>
+	            <tr id="log0">
+	            	<td id="logT"></td>
+	            	<td id="logL"></td>
+	            	<td id="logR"></td>
+	            </tr>
+		        <tr id="log1">
+		        	<td></td>
+		        	<td></td>
+		        	<td></td>
+		        </tr>
+		        <tr id="log2"></tr>
+		        <tr id="log3"></tr>
+		        <tr id="log4"></tr>
+		        <tr id="log5"></tr>
+		        <tr id="log6"></tr>
+		        <tr id="log7"></tr>
+		        <tr id="log8"></tr>
+		        <tr id="log9"></tr>
+        	</tbody>
+        </table>
+	</div> <!-- End log -->
 <script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>

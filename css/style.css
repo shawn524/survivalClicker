@@ -20,6 +20,18 @@ table {
 	padding-top: 30px;
 }
 
+#main_body {
+	width: 50%;
+	float: left;
+	border: 1px solid gray;
+}
+
+#game_console {
+	border: 1px solid black;
+	width: 50%;
+	margin-left: 50%;
+}
+
 #gather_button {
 	height: 40px;
 	width: 60%;

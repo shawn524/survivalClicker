@@ -50,6 +50,7 @@ var medpack = {
 var basicSupplies = [food, water, ammo, scrap, medpack];
 var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance];
 var lesserMulti = 1;
+var greaterMulti = 1;
 var daysSurvived = 0;
 
 // Generates a random number between min and max.
@@ -80,10 +81,12 @@ var gatherSupplies = function(basicSupplies, weight) {
         if (random_num <= weight_sum) {
         	item_drop.total++;
             console.log('found some',basicSupplies[i].name);
+            gameLog('You found some ' + basicSupplies[i].name);
             break;
         }
     }
 
+    // 10 clicks to a day
     daysSurvived += 0.1;
     // Apply certain functions when button pressed
     updateTotals();
@@ -94,9 +97,9 @@ var gatherSupplies = function(basicSupplies, weight) {
 };
 
 function playerStatsRemoval() {
-	playerAttributes.hunger += (1 * lesserMulti);
-	playerAttributes.thirst += (1 * lesserMulti);
-	playerAttributes.rads += (1 * lesserMulti);
+	playerAttributes.hunger += (1 * lesserMulti * greaterMulti);
+	playerAttributes.thirst += (1 * lesserMulti * greaterMulti);
+	playerAttributes.rads += (1 * lesserMulti * greaterMulti);
 }
 
 function deathCheck() {
@@ -147,9 +150,11 @@ function applyStatusEffect() {
 		playerAttributes.starving = false;
 	} else if((playerAttributes.hunger >= 60 && playerAttributes.hunger < 100) && !playerAttributes.starving) {
 		playerAttributes.hungry = true;
+		gameLog("You are hungry");
 	} else if(playerAttributes.hunger >= 100) {
 		playerAttributes.hungry = false;
 		playerAttributes.starving = true;
+		gameLog("You are starving");
 	};
 	// Thirst
 	if(playerAttributes.thirst < 60) {
@@ -157,15 +162,18 @@ function applyStatusEffect() {
 		playerAttributes.dehydrated = false;
 	} else if((playerAttributes.thirst >= 60 && playerAttributes.thirst < 100) && !playerAttributes.dehydrated) {
 		playerAttributes.thirsty = true;
+		gameLog("You are thirsty");
 	} else if(playerAttributes.thirst >= 100) {
 		playerAttributes.thirsty = false;
 		playerAttributes.dehydrated = true;
+		gameLog("You are dehydrated");
 	};
 	// Rad sickness
 	if(playerAttributes.rads < 100) {
 		playerAttributes.sick = false;
 	} else if(playerAttributes.rads >= 100 && playerAttributes.rads < 200){
 		playerAttributes.sick = true;
+		gameLog("You have radiation sickness");
 	} else if(playerAttributes.rads == 200) {
 		playerAttributes.health = 0;
 	};
@@ -194,6 +202,19 @@ function statusMulti() {
 	if(playerAttributes.hungry && playerAttributes.thirsty && playerAttributes.sick) {
 		lesserMulti = 4.5;
 	};
+
+	// Greater status effects
+	// If one or none
+	if(!playerAttributes.starving && !playerAttributes.dehydrated) {
+		greaterMulti = 1.0;
+	}
+	if(playerAttributes.starving || playerAttributes.dehydrated) {
+		greaterMulti = 2.0;
+	}
+	// If both
+	if(playerAttributes.starving && playerAttributes.dehydrated) {
+		greaterMulti = 4.0;
+	}
 
 	// Display to player
 	// Hunger
@@ -243,6 +264,31 @@ function useItem(item) {
 	}
 }
 
+// In-game log message
+function gameLog(message){
+	// Check to see if the last message was the same as this one, if so just increment the (xNumber) value
+	if (document.getElementById('logL').innerHTML == message){
+		logRepeat += 1;
+		document.getElementById('log0').innerHTML = '<td id="logT">' + '</td><td id="logL">' + message + '</td><td id="logR">(x' + logRepeat + ')</td>';
+	} else {
+		// Reset the (xNumber) value
+		logRepeat = 1
+		// Go through all the logs in order, moving them down one and successively overwriting them.
+		// Bottom five elements temporarily removed, may be readded later.
+		document.getElementById('log9').innerHTML = document.getElementById('log8').innerHTML
+		document.getElementById('log8').innerHTML = document.getElementById('log7').innerHTML
+		document.getElementById('log7').innerHTML = document.getElementById('log6').innerHTML
+		document.getElementById('log6').innerHTML = document.getElementById('log5').innerHTML
+		document.getElementById('log5').innerHTML = document.getElementById('log4').innerHTML
+		document.getElementById('log4').innerHTML = document.getElementById('log3').innerHTML
+		document.getElementById('log3').innerHTML = document.getElementById('log2').innerHTML
+		document.getElementById('log2').innerHTML = document.getElementById('log1').innerHTML
+		// Since ids need to be unique, log1 strips the ids from the log0 elements when copying the contents.
+		document.getElementById('log1').innerHTML = '<td>' + document.getElementById('logT').innerHTML + '</td><td>' + document.getElementById('logL').innerHTML + '</td><td>' + document.getElementById('logR').innerHTML + '</td>';
+		// Creates new contents with new message, and x1
+		document.getElementById('log0').innerHTML = '<td id="logT">' + '</td><td id="logL">' + message + '</td><td id="logR">(x' + logRepeat + ')</td>';
+	}
+}
 
 // Main timer function
 window.setInterval(function(){
@@ -251,5 +297,5 @@ window.setInterval(function(){
 	updateTotals();
 	applyStatusEffect();
 	deathCheck();
-	console.log('multi', lesserMulti)
+	console.log('multi ' + (lesserMulti * greaterMulti))
 }, 1000);
