@@ -311,6 +311,11 @@ function useItem(item) {
 	}
 }
 
+// Build structures 
+function shelter(arg){
+
+}
+
 // In-game log message
 function gameLog(message) {
 	// Check to see if the last message was the same as this one, if so just increment the (xNumber) value
@@ -346,3 +351,83 @@ window.setInterval(function() {
 	deathCheck();
 	// console.log('multi ' + (lesserMulti * greaterMulti))
 }, 1000);
+
+
+/*====================================================================================================*/
+
+
+// Items, Upgrades, and Structures
+var buildings = [
+	shack = {
+		'name': 'shack',
+		'discription': "A modest hole with walls.",
+		'isBuildable': false,
+		'cost': 100,
+		'integrity': 40,
+		'upgradeSlots': 0,
+	}
+]
+
+var upgrades = [
+	// Storage containers
+	box = {
+		'name': 'box',
+		'discription': "A simple box to hold things.",
+		'type': 'storage',
+		'maxStorage': {
+			'food': 10,
+			'water': 10,
+			'ammo': 10,
+			'scrap': 10,
+			'medpack': 10
+		},
+		'totalStorage': {
+			'food': 0,
+			'water': 0,
+			'ammo': 0,
+			'scrap': 0,
+			'medpack': 0
+		},
+		'cost': '20'
+	},
+	crate = {
+		'name': 'crate',
+		'discription': "Larger then a box, smaller then a chest.",
+		'type': 'storage',
+		'maxStorage': {
+			'food': 20,
+			'water': 20,
+			'ammo': 20,
+			'scrap': 20,
+			'medpack': 120
+		},
+		'totalStorage': {
+			'food': 0,
+			'water': 0,
+			'ammo': 0,
+			'scrap': 0,
+			'medpack': 0
+		},
+		'cost': '50'
+	},
+	chest = {
+		'name': 'chest',
+		'discription': "Can hold a bunch of your stuff.",
+		'type': 'storage',
+		'maxStorage': {
+			'food': 50,
+			'water': 50,
+			'ammo': 50,
+			'scrap': 50,
+			'medpack': 50
+		},
+		'totalStorage': {
+			'food': 0,
+			'water': 0,
+			'ammo': 0,
+			'scrap': 0,
+			'medpack': 0
+		},
+		'cost': '100'
+	}
+]
