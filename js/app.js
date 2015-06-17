@@ -102,8 +102,8 @@ var gatherSupplies = function(basicSupplies, weight) {
 
 function playerStatsRemoval() {
 	playerAttributes.hunger += (1 * lesserMulti * greaterMulti);
-	playerAttributes.thirst += (1 * lesserMulti * greaterMulti);
-	playerAttributes.rads += (1 * lesserMulti * greaterMulti);
+	playerAttributes.thirst += (1.2 * lesserMulti * greaterMulti);
+	playerAttributes.rads += (1.5 * lesserMulti * greaterMulti);
 	// Health removal
 	if (playerAttributes.hungry || playerAttributes.thirsty || playerAttributes.sick) {
 		playerAttributes.health -= (1 * lesserMulti * greaterMulti);
@@ -158,6 +158,7 @@ function updateTotals() {
 	document.getElementById('rads_count').innerHTML = playerAttributes.rads.toFixed(0);
 	// Days survived rounded down
 	document.getElementById('days_survived_count').innerHTML = Math.floor(daysSurvived).toFixed(0);
+	// Reveal building options
 
 };
 
@@ -312,8 +313,31 @@ function useItem(item) {
 }
 
 // Build structures 
-function shelter(arg){
+var shelter = {
+	build: function(type){
+		if(type.cost <= scrap.total) {
+			scrap.total -= type.cost;
+			type.isBuildable = false;
+			type.isBuilt = true;
+			// Initial building integrity is a random value between max and 10 less then max, rounded down.
+			type.currentIntegrity = Math.floor(rand((type.maxIntegrity - 10), type.maxIntegrity)).toFixed(0)
+			gameLog("Completed building " + type.name + " with integrity of " + type.currentIntegrity);
+		} else {
+			var needed = type.cost - scrap.total;
+			gameLog("Not enough scrap. Need " + needed + " more.");
+		};
+	},
 
+	maintain: function(type) {
+		if(type.isBuilt && type.currentIntegrity < type.maxIntegrity && scrap.total > (type.cost / 2)) {
+			scrap.total -= (type.cost / 2);
+			type.currentIntegrity = type.maxIntegrity;
+			gameLog("Completed repairs on " + type.name + " with integrity of " + type.currentIntegrity);
+		} else {
+			var needed = (type.cost / 2) - scrap.total;
+			gameLog("Not enough scrap. Need " + needed + " more.");
+		};
+	},
 }
 
 // In-game log message
@@ -335,7 +359,7 @@ function gameLog(message) {
 		document.getElementById('log4').innerHTML = document.getElementById('log3').innerHTML
 		document.getElementById('log3').innerHTML = document.getElementById('log2').innerHTML
 		document.getElementById('log2').innerHTML = document.getElementById('log1').innerHTML
-			// Since ids need to be unique, log1 strips the ids from the log0 elements when copying the contents.
+		// Since ids need to be unique, log1 strips the ids from the log0 elements when copying the contents.
 		document.getElementById('log1').innerHTML = '<td>' + document.getElementById('logT').innerHTML + '</td><td>' + document.getElementById('logL').innerHTML + '</td><td>' + document.getElementById('logR').innerHTML + '</td>';
 		// Creates new contents with new message, and x1
 		document.getElementById('log0').innerHTML = '<td id="logT">' + '</td><td id="logL">' + message + '</td><td id="logR">(x' + logRepeat + ')</td>';
@@ -363,33 +387,39 @@ var buildings = [
 		'discription': "A modest hole.",
 		'isBuildable': false,
 		'cost': 40,
-		'integrity': 20,
+		'maxIntegrity': 20,
+		'currentIntegrity': 0,
 		'upgradeSlots': 1,
 		'buffs': {
 			// idk yet
-		}
+		},
+		'isBuilt': false
 	},
 	shack = {
 		'name': 'shack',
 		'discription': "Basically a metal tent.",
 		'isBuildable': false,
 		'cost': 80,
-		'integrity': 40,
+		'maxIntegrity': 40,
+		'currentIntegrity': 0,
 		'upgradeSlots': 1,
 		'buffs': {
 			// idk yet
-		}
+		},
+		'isBuilt': false
 	},
 	hut = {
 		'name': 'hut',
 		'discription': "Starting to look like a real house.",
 		'isBuildable': false,
 		'cost': 120,
-		'integrity': 60,
+		'maxIntegrity': 60,
+		'currentIntegrity': 0,
 		'upgradeSlots': 2,
 		'buffs': {
 			// idk yet
-		}
+		},
+		'isBuilt': false
 	}
 
 ]

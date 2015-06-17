@@ -9,7 +9,6 @@ An incremental game with a post apocalyptic twist
   - Upgrades to the structures
 - Rare loot drops like weapons and armor
 - Item storage in your home base
-- 
 
 
 
