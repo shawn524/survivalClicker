@@ -358,14 +358,40 @@ window.setInterval(function() {
 
 // Items, Upgrades, and Structures
 var buildings = [
+	hole = {
+		'name': 'hole',
+		'discription': "A modest hole.",
+		'isBuildable': false,
+		'cost': 40,
+		'integrity': 20,
+		'upgradeSlots': 1,
+		'buffs': {
+			// idk yet
+		}
+	},
 	shack = {
 		'name': 'shack',
-		'discription': "A modest hole with walls.",
+		'discription': "Basically a metal tent.",
 		'isBuildable': false,
-		'cost': 100,
+		'cost': 80,
 		'integrity': 40,
-		'upgradeSlots': 0,
+		'upgradeSlots': 1,
+		'buffs': {
+			// idk yet
+		}
+	},
+	hut = {
+		'name': 'hut',
+		'discription': "Starting to look like a real house.",
+		'isBuildable': false,
+		'cost': 120,
+		'integrity': 60,
+		'upgradeSlots': 2,
+		'buffs': {
+			// idk yet
+		}
 	}
+
 ]
 
 var upgrades = [
