@@ -10,6 +10,9 @@ table {
 	width: 50%;
 }
 
+/*td {
+	border: 1px solid black;
+}*/
 
 .hidden {
 	display: none;
@@ -26,10 +29,21 @@ table {
 	border: 1px solid gray;
 }
 
+#buildings {
+	float: left;
+	clear: left;
+	display: block;
+}
+
 #game_console {
-	border: 1px solid black;
+	border: 1px solid gray;
 	width: 50%;
 	margin-left: 50%;
+	position: fixed;
+}
+
+#logTable {
+	width: 90%;
 }
 
 #gather_button {

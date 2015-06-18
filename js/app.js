@@ -15,6 +15,22 @@ var playerAttributes = {
 	'rads': 10,
 	'sick': false,
 	'gameOver': false
+};
+var homeStorage = {
+	'maxStorage': {
+		food: 0,
+		water: 0,
+		ammo: 0,
+		scrap: 0,
+		medpack: 0
+	},
+	'currentStorage': {
+		food: 0,
+		water: 0,
+		ammo: 0,
+		scrap: 0,
+		medpack: 0
+	}
 }
 var food = {
 	name: 'food',
@@ -308,36 +324,52 @@ function useItem(item) {
 		}
 	} else {
 		gameLog('Not enough ' + item.name);
-		// console.log('Not enough', item.name);
 	}
 }
 
-// Build structures 
+// Build, maintain, and upgrade structures 
 var shelter = {
-	build: function(type){
-		if(type.cost <= scrap.total) {
-			scrap.total -= type.cost;
-			type.isBuildable = false;
-			type.isBuilt = true;
+	build: function(structure){
+		if(structure.cost <= scrap.total) {
+			scrap.total -= structure.cost;
+			structure.isBuildable = false;
+			structure.isBuilt = true;
 			// Initial building integrity is a random value between max and 10 less then max, rounded down.
-			type.currentIntegrity = Math.floor(rand((type.maxIntegrity - 10), type.maxIntegrity)).toFixed(0)
-			gameLog("Completed building " + type.name + " with integrity of " + type.currentIntegrity);
+			structure.currentIntegrity = Math.floor(rand((structure.maxIntegrity - 10), structure.maxIntegrity)).toFixed(0)
+			gameLog("Completed building " + structure.name + " with integrity of " + structure.currentIntegrity);
 		} else {
-			var needed = type.cost - scrap.total;
+			var needed = structure.cost - scrap.total;
 			gameLog("Not enough scrap. Need " + needed + " more.");
 		};
 	},
 
-	maintain: function(type) {
-		if(type.isBuilt && type.currentIntegrity < type.maxIntegrity && scrap.total > (type.cost / 2)) {
-			scrap.total -= (type.cost / 2);
-			type.currentIntegrity = type.maxIntegrity;
-			gameLog("Completed repairs on " + type.name + " with integrity of " + type.currentIntegrity);
+	maintain: function(structure) {
+		if(structure.isBuilt && structure.currentIntegrity < structure.maxIntegrity && scrap.total > (structure.cost / 2)) {
+			scrap.total -= (structure.cost / 2);
+			structure.currentIntegrity = structure.maxIntegrity;
+			gameLog("Completed repairs on " + structure.name + " with integrity of " + structure.currentIntegrity);
 		} else {
-			var needed = (type.cost / 2) - scrap.total;
+			var needed = (structure.cost / 2) - scrap.total;
 			gameLog("Not enough scrap. Need " + needed + " more.");
 		};
 	},
+
+	upgrade: function(structure, upgrade) {
+		if(structure.isBuilt && structure.upgrades < structure.upgradeSlots && scrap.total >= upgrade.cost) {
+			if(upgrade.type == 'storage') {
+				// homeStorage.maxStorage increased by upgrade.maxStorage
+				homeStorage.maxStorage.food = upgrade.maxStorage.food;
+				homeStorage.maxStorage.water = upgrade.maxStorage.water;
+				homeStorage.maxStorage.ammo = upgrade.maxStorage.ammo;
+				homeStorage.maxStorage.scrap = upgrade.maxStorage.scrap;
+				homeStorage.maxStorage.medpack = upgrade.maxStorage.medpack;
+				gameLog("Built a " + upgrade.name + " in your " + structure.name);
+			}
+		} else {
+			var needed = upgrade.cost - scrap.total;
+			gameLog("Not enough scrap. Need " + needed + " more.");
+		}
+	}
 }
 
 // In-game log message
@@ -390,6 +422,7 @@ var buildings = [
 		'maxIntegrity': 20,
 		'currentIntegrity': 0,
 		'upgradeSlots': 1,
+		'upgrades': 0,
 		'buffs': {
 			// idk yet
 		},
@@ -403,6 +436,7 @@ var buildings = [
 		'maxIntegrity': 40,
 		'currentIntegrity': 0,
 		'upgradeSlots': 1,
+		'upgrades': 0,
 		'buffs': {
 			// idk yet
 		},
@@ -416,6 +450,7 @@ var buildings = [
 		'maxIntegrity': 60,
 		'currentIntegrity': 0,
 		'upgradeSlots': 2,
+		'upgrades': 0,
 		'buffs': {
 			// idk yet
 		},

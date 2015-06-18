@@ -69,7 +69,8 @@
 				</tr>
 			</tbody>
 		</table>
-	
+		
+		<!-- Buttons -->
 		<button class="button" id="gather_button" onclick="gatherSupplies(basicSupplies, weight)"><strong>Gather supplies</strong></button>
 		<div class="controls">
 			<button class="button" id="medpack_button" onclick="useItem(medpack)">Medpack</button>
@@ -77,6 +78,24 @@
 			<button class="button" id="water_button" onclick="useItem(water)">Drink</button>
 		</div>
 	</div> <!-- End main body -->
+
+	<!-- Structures and Upgrades -->
+		<table id="buildings">
+			<tbody class="_hidden">
+				<tr>
+					<td><h4>Structures:</h4></td>
+				</tr>
+				<tr>
+					<td id="hole_name">Hole</td>
+					<td id="hole_cost">Cost</td>
+					<td id="hole_button"><button class="button" id="build_hole" onclick="shelter.build(buildings[0])">Build</button></td>
+				</tr>
+				<tr>
+					<td id="hole_discription">Discription</td>
+				</tr>
+			</tbody>
+		</table>
+
 	<div id="game_console"> <!-- In game log messages -->
 		<h3>Events</h3>
         <table id="logTable">
