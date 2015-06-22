@@ -174,7 +174,13 @@ function updateTotals() {
 	document.getElementById('rads_count').innerHTML = playerAttributes.rads.toFixed(0);
 	// Days survived rounded down
 	document.getElementById('days_survived_count').innerHTML = Math.floor(daysSurvived).toFixed(0);
-	// Reveal building options
+	// Structure costs and discriptions
+	document.getElementById('hole_cost').innerHTML = buildings[0].cost;
+	document.getElementById('hole_discription').innerHTML = buildings[0].discription;
+	document.getElementById('shack_cost').innerHTML = buildings[1].cost;
+	document.getElementById('shack_discription').innerHTML = buildings[1].discription;
+	document.getElementById('hut_cost').innerHTML = buildings[2].cost;
+	document.getElementById('hut_discription').innerHTML = buildings[2].discription;
 
 };
 
@@ -382,7 +388,6 @@ function gameLog(message) {
 		// Reset the (xNumber) value
 		logRepeat = 1
 			// Go through all the logs in order, moving them down one and successively overwriting them.
-			// Bottom five elements temporarily removed, may be readded later.
 		document.getElementById('log9').innerHTML = document.getElementById('log8').innerHTML
 		document.getElementById('log8').innerHTML = document.getElementById('log7').innerHTML
 		document.getElementById('log7').innerHTML = document.getElementById('log6').innerHTML
@@ -395,6 +400,35 @@ function gameLog(message) {
 		document.getElementById('log1').innerHTML = '<td>' + document.getElementById('logT').innerHTML + '</td><td>' + document.getElementById('logL').innerHTML + '</td><td>' + document.getElementById('logR').innerHTML + '</td>';
 		// Creates new contents with new message, and x1
 		document.getElementById('log0').innerHTML = '<td id="logT">' + '</td><td id="logL">' + message + '</td><td id="logR">(x' + logRepeat + ')</td>';
+	}
+}
+
+// Panel selection
+function paneSelect(name){
+	// Called when user switches between the various panes 
+	if (name == 'buildings'){
+		document.getElementById("buildingsPane").style.display = "block";
+		document.getElementById("upgradesPane").style.display = "none";
+		document.getElementById("storagePane").style.display = "none";
+		document.getElementById("selectBuildings").className = "paneSelector selected";
+		document.getElementById("selectUpgrades").className = "paneSelector";
+		document.getElementById("selectStorage").className = "paneSelector";
+	}
+	if (name == 'upgrades'){
+		document.getElementById("buildingsPane").style.display = "none";
+		document.getElementById("upgradesPane").style.display = "block";
+		document.getElementById("storagePane").style.display = "none";
+		document.getElementById("selectBuildings").className = "paneSelector";
+		document.getElementById("selectUpgrades").className = "paneSelector selected";
+		document.getElementById("selectStorage").className = "paneSelector";
+	}
+	if (name == 'storage'){
+		document.getElementById("buildingsPane").style.display = "none";
+		document.getElementById("upgradesPane").style.display = "none";
+		document.getElementById("storagePane").style.display = "block";
+		document.getElementById("selectBuildings").className = "paneSelector";
+		document.getElementById("selectUpgrades").className = "paneSelector";
+		document.getElementById("selectStorage").className = "paneSelector selected";
 	}
 }
 
@@ -444,7 +478,7 @@ var buildings = [
 	},
 	hut = {
 		'name': 'hut',
-		'discription': "Starting to look like a real house.",
+		'discription': "Sturdy looking thing.",
 		'isBuildable': false,
 		'cost': 120,
 		'maxIntegrity': 60,
