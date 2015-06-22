@@ -33,15 +33,30 @@ table {
 	border: 1px solid gray;
 }
 
-#buildings,
-#upgrades,
-#storage {
+#buildingsPane {
 	float: left;
 	clear: left;
 	display: block;
 }
 
+#upgradesPane,
+#storagePane {
+	float: left;
+	clear: left;
+	display: none;
+}
+
 #buildings button {
+	width: 100px;
+	margin-right: 20px;
+}
+
+#upgrades button {
+	width: 100px;
+	margin-right: 20px;
+}
+
+#storage button {
 	width: 100px;
 	margin-right: 20px;
 }
@@ -67,27 +82,29 @@ table {
 #selectors {
 	width: 50%;
 	float: left;
-}
-
-.paneSelector{
-	display: inline;
-	width: 20%;
-	text-align: center;
-	margin: 1em 0;
-	line-height: 2em;
-	border: 2px solid black;
 	clear: both;
 }
-.paneSelector:hover{
+
+.paneSelector {
+	width: 30%;
+	line-height: 2em;
+	text-align: center;
+	margin: 1em 0;
+	border: 2px solid black;
+	display: inline-block;
+}
+
+.paneSelector:hover {
 	text-decoration:underline;
-	text-shadow: none;
 	cursor:pointer;
 }
-.selected{
+
+.selected {
 	border-bottom:none;
 	font-weight: bold;	
 }
-.selected:hover{
+
+.selected:hover {
 	text-decoration:none;
 	cursor:auto;
 }
