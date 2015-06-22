@@ -33,7 +33,9 @@ table {
 	border: 1px solid gray;
 }
 
-#buildings {
+#buildings,
+#upgrades,
+#storage {
 	float: left;
 	clear: left;
 	display: block;
@@ -62,14 +64,19 @@ table {
 }
 
 /* Pane selection styling */
+#selectors {
+	width: 50%;
+	float: left;
+}
+
 .paneSelector{
-	width:15%;
-	float:left;
-	text-align:center;
-	margin:1em 0;
-	line-height:2em;
-	border:2px solid black;
-	background-color:#fff;
+	display: inline;
+	width: 20%;
+	text-align: center;
+	margin: 1em 0;
+	line-height: 2em;
+	border: 2px solid black;
+	clear: both;
 }
 .paneSelector:hover{
 	text-decoration:underline;
@@ -78,13 +85,9 @@ table {
 }
 .selected{
 	border-bottom:none;
-	background:none;
-	color:white;
-	text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+	font-weight: bold;	
 }
 .selected:hover{
 	text-decoration:none;
 	cursor:auto;
-	background:none;
-	text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
 }

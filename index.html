@@ -80,7 +80,7 @@
 	</div> <!-- End main body -->
 
 	<!-- Structures and Upgrades -->
-		<div id="panesSelectors">
+	<div id="paneSelectors">
 		<div id="selectors">
 			<div id="selectBuildings" class="paneSelector selected" onclick="paneSelect(&#39;buildings&#39;)">Buildings</div>
 			<div id="selectUpgrades" class="paneSelector" onclick="paneSelect(&#39;upgrades&#39;)">Upgrades</div>
@@ -88,39 +88,60 @@
 		</div>
 		
 		<div id="buildingsPane">
-		<h3>Buildings</h3>
-		<table id="buildings">
-			<tbody class="_hidden">
-				<tr>
-					<td><h4>Structures:</h4></td>
-				</tr>
-				<tr id="hole_row">
-					<td id="hole_button"><button class="button" id="build_hole" onclick="shelter.build(buildings[0])">Build Hole</button></td>
-					<td id="hole_cost">Cost</td>
-					<td id="hole_discription" class="discription">Discription</td>
-				</tr>
-				<tr id="shack_row">
-					<td id="shack_button"><button class="button" id="build_shack" onclick="shelter.build(buildings[1])">Build Shack</button></td>
-					<td id="shack_cost">Cost</td>
-					<td id="shack_discription" class="discription">Discription</td>
-				</tr>
-				<tr id="hut_row">
-					<td id="hut_button"><button class="button" id="build_hut" onclick="shelter.build(buildings[2])">Build Hut</button></td>
-					<td id="hut_cost">Cost</td>
-					<td id="hut_discription" class="discription">Discription</td>
-				</tr>
-			</tbody>
-		</table>
+			<table id="buildings">
+				<tbody class="_hidden">
+					<tr>
+						<td><h4>Buildings:</h4></td>
+					</tr>
+					<tr id="hole_row">
+						<td id="hole_button"><button class="button" id="build_hole" onclick="shelter.build(buildings[0])">Build Hole</button></td>
+						<td id="hole_cost">Cost</td>
+						<td id="hole_discription" class="discription">Discription</td>
+					</tr>
+					<tr id="shack_row">
+						<td id="shack_button"><button class="button" id="build_shack" onclick="shelter.build(buildings[1])">Build Shack</button></td>
+						<td id="shack_cost">Cost</td>
+						<td id="shack_discription" class="discription">Discription</td>
+					</tr>
+					<tr id="hut_row">
+						<td id="hut_button"><button class="button" id="build_hut" onclick="shelter.build(buildings[2])">Build Hut</button></td>
+						<td id="hut_cost">Cost</td>
+						<td id="hut_discription" class="discription">Discription</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 		
 		<div id="upgradesPane">
-		<h3>Upgrades</h3>
+			<table id="upgrades">
+				<tbody class="_hidden">
+					<tr>
+						<td><h4>Upgrades:</h4></td>
+					</tr>
+					<tr id="hole_row">
+						<td id="hole_button"><button class="button" id="build_hole" onclick="shelter.build(buildings[0])">Build Hole</button></td>
+						<td id="hole_cost">Cost</td>
+						<td id="hole_discription" class="discription">Discription</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 		
 		<div id="storagePane">
-		<h3>Storage</h3>
+			<table id="storage">
+				<tbody class="_hidden">
+					<tr>
+						<td><h4>Storage:</h4></td>
+					</tr>
+					<tr id="hole_row">
+						<td id="hole_button"><button class="button" id="build_hole" onclick="shelter.build(buildings[0])">Build Hole</button></td>
+						<td id="hole_cost">Cost</td>
+						<td id="hole_discription" class="discription">Discription</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-</div>
+	</div>
 
 	<div id="game_console"> <!-- In game log messages -->
 		<h3>Events</h3>
