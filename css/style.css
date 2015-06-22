@@ -4,7 +4,8 @@ body {
 	font-family: 'Ubuntu Mono';
 }
 
-table {
+#basicSuppliesCount,
+#playerAttributes {
 	display: inline-block;
 	float: left;
 	width: 50%;
@@ -25,6 +26,7 @@ table {
 
 .discription {
 	text-align: right;
+	padding-left: 10%;
 }
 
 #main_body {
@@ -44,6 +46,12 @@ table {
 	float: left;
 	clear: left;
 	display: none;
+}
+
+#buildings,
+#upgrades,
+#storage {
+	width: 100%;
 }
 
 #buildings button {

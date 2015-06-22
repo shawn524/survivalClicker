@@ -174,14 +174,31 @@ function updateTotals() {
 	document.getElementById('rads_count').innerHTML = playerAttributes.rads.toFixed(0);
 	// Days survived rounded down
 	document.getElementById('days_survived_count').innerHTML = Math.floor(daysSurvived).toFixed(0);
-	// Structure costs and discriptions
+	// Building costs and discriptions
 	document.getElementById('hole_cost').innerHTML = buildings[0].cost;
 	document.getElementById('hole_discription').innerHTML = buildings[0].discription;
 	document.getElementById('shack_cost').innerHTML = buildings[1].cost;
 	document.getElementById('shack_discription').innerHTML = buildings[1].discription;
 	document.getElementById('hut_cost').innerHTML = buildings[2].cost;
 	document.getElementById('hut_discription').innerHTML = buildings[2].discription;
-
+	// Upgrade costs and discriptions
+	document.getElementById('box_cost').innerHTML = upgrades[0].cost;
+	document.getElementById('box_discription').innerHTML = upgrades[0].discription;
+	document.getElementById('crate_cost').innerHTML = upgrades[1].cost;
+	document.getElementById('crate_discription').innerHTML = upgrades[1].discription;
+	document.getElementById('chest_cost').innerHTML = upgrades[2].cost;
+	document.getElementById('chest_discription').innerHTML = upgrades[2].discription;
+	// Storage counts
+	document.getElementById('current_food').innerHTML = homeStorage.currentStorage.food;
+	document.getElementById('max_food').innerHTML = homeStorage.maxStorage.food;
+	document.getElementById('current_water').innerHTML = homeStorage.currentStorage.water;
+	document.getElementById('max_water').innerHTML = homeStorage.maxStorage.water;
+	document.getElementById('current_ammo').innerHTML = homeStorage.currentStorage.ammo;
+	document.getElementById('max_ammo').innerHTML = homeStorage.maxStorage.ammo;
+	document.getElementById('current_scrap').innerHTML = homeStorage.currentStorage.scrap;
+	document.getElementById('max_scrap').innerHTML = homeStorage.maxStorage.scrap;
+	document.getElementById('current_medpack').innerHTML = homeStorage.currentStorage.medpack;
+	document.getElementById('max_medpack').innerHTML = homeStorage.maxStorage.medpack;
 };
 
 function statsLimiter() {
@@ -375,7 +392,7 @@ var shelter = {
 			var needed = upgrade.cost - scrap.total;
 			gameLog("Not enough scrap. Need " + needed + " more.");
 		}
-	}
+	},
 }
 
 // In-game log message
