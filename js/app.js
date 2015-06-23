@@ -132,10 +132,20 @@ function playerStatsRemoval() {
 
 function deathCheck() {
 	if (playerAttributes.health == 0 && !playerAttributes.gameOver) {
-		alert("You have succumbed to deaths cold embrace. Your journey has ended.")
-		playerAttributes.gameOver = true;
-		resetGame();
-	}
+		if(homeStorage.currentStorage.medpack > (homeStorage.maxStorage.medpack / 2)) {
+			alert("You manage to stumble blindly home and patch yourself up somehow. ");
+			gameLog("The will to live is strong.")
+			homeStorage.currentStorage.medpack = 0;
+			playerAttributes.health = 100;
+			playerAttributes.hunger = 0;
+			playerAttributes.thirst = 0;
+			playerAttributes.rads = 0;
+		} else {
+			alert("You have succumbed to deaths cold embrace. Your journey has ended.")
+			playerAttributes.gameOver = true;
+			resetGame();
+		}
+	} 
 }
 
 function resetGame() {
