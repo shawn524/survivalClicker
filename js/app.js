@@ -101,7 +101,7 @@ var gatherSupplies = function(basicSupplies, weight) {
 
 		if (random_num <= weight_sum) {
 			item_drop.total++;
-			console.log('found some', basicSupplies[i].name);
+			// console.log('found some', basicSupplies[i].name);
 			gameLog('You found some ' + basicSupplies[i].name);
 			break;
 		}
@@ -363,7 +363,9 @@ function useItem(item) {
 // Build, maintain, and upgrade structures 
 var shelter = {
 	build: function(structure){
-		if(structure.cost <= scrap.total) {
+		if(structure.isBuilt) {
+			gameLog("You already built a " + structure.name);
+		} else if(structure.cost <= scrap.total) {
 			scrap.total -= structure.cost;
 			structure.isBuildable = false;
 			structure.isBuilt = true;
@@ -406,6 +408,18 @@ var shelter = {
 				var needed = upgrade.cost - scrap.total;
 				gameLog("Not enough scrap. Need " + needed + " more.");
 			}
+		}
+	},
+
+	store: function(item) {
+		if(item.total == 0) {
+			gameLog("Not enough " + item.name);
+		} else if(homeStorage.currentStorage[item.name] < homeStorage.maxStorage[item.name] && item.total > 0) {
+			item.total -= 1;
+			homeStorage.currentStorage[item.name] += 1;
+			gameLog("Stored 1 " + item.name);
+		} else {
+			gameLog(item.name + " storage at capacity.");
 		}
 	}
 }
