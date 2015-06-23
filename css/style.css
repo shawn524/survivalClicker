@@ -42,6 +42,28 @@ body {
 	border: 1px solid gray;
 }
 
+#game_console {
+	border: 1px solid gray;
+	width: 50%;
+	margin-left: 50%;
+	position: fixed;
+}
+
+#logTable {
+	width: 90%;
+}
+
+#gather_button {
+	height: 40px;
+	width: 60%;
+	margin: 30px 15% 0;
+}
+
+/* Pane selection styling */
+#paneSelectors {
+	width: 50%;
+}
+
 #buildingsPane {
 	float: left;
 	clear: left;
@@ -76,26 +98,8 @@ body {
 	margin-left: 20px;
 }
 
-#game_console {
-	border: 1px solid gray;
-	width: 50%;
-	margin-left: 50%;
-	position: fixed;
-}
-
-#logTable {
-	width: 90%;
-}
-
-#gather_button {
-	height: 40px;
-	width: 60%;
-	margin: 30px 15% 0;
-}
-
-/* Pane selection styling */
 #selectors {
-	width: 50%;
+	width: 100%;
 	float: left;
 	clear: both;
 }
