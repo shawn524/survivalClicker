@@ -150,12 +150,24 @@ function resetGame() {
 		playerAttributes.rads = 10;
 		playerAttributes.sick = false;
 		playerAttributes.gameOver = false;
+		playerAttributes.currentHome = 'none';
+		homeStorage.currentStorage.food = 0;
+		homeStorage.currentStorage.water = 0;
+		homeStorage.currentStorage.ammo = 0;
+		homeStorage.currentStorage.scrap = 0;
+		homeStorage.currentStorage.medpack = 0;
+		homeStorage.maxStorage.food = 0;
+		homeStorage.maxStorage.water = 0;
+		homeStorage.maxStorage.ammo = 0;
+		homeStorage.maxStorage.scrap = 0;
+		homeStorage.maxStorage.medpack = 0;
 		food.total = 0;
 		water.total = 0;
 		ammo.total = 0;
 		scrap.total = 0;
 		medpack.total = 0;
 		daysSurvived = 0;
+		gameLog("Game reset.")
 	} else {
 		// disable buttons?
 	}
