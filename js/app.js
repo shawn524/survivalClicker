@@ -65,7 +65,7 @@ var medpack = {
 };
 var nothing = {
 	name: 'nothing',
-	chance: 0.4,
+	chance: 0.3,
 };
 
 var basicSupplies = [food, water, ammo, scrap, medpack, nothing];

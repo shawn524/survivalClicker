@@ -25,8 +25,15 @@ body {
 }
 
 .discription {
-	text-align: right;
 	padding-left: 10%;
+}
+
+.col1, .col2 {
+  white-space: nowrap;
+}
+
+.col3 {
+  width: 99%;
 }
 
 #main_body {
