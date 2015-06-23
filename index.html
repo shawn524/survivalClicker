@@ -119,17 +119,17 @@
 						<td><h4>Upgrades:</h4></td>
 					</tr>
 					<tr id="box_row">
-						<td id="box_button"><button class="button" id="build_box" onclick="shelter.upgrade(upgrades[0])">Build Box</button></td>
+						<td id="box_button"><button class="button" id="build_box" onclick="shelter.upgrade(playerAttributes.currentHome,upgrades[0])">Build Box</button></td>
 						<td id="box_cost">Cost</td>
 						<td id="box_discription" class="discription">Discription</td>
 					</tr>
 					<tr id="crate_row">
-						<td id="crate_button"><button class="button" id="build_crate" onclick="shelter.upgrade(upgrades[1])">Build Crate</button></td>
+						<td id="crate_button"><button class="button" id="build_crate" onclick="shelter.upgrade(playerAttributes.currentHome,upgrades[1])">Build Crate</button></td>
 						<td id="crate_cost">Cost</td>
 						<td id="crate_discription" class="discription">Discription</td>
 					</tr>
 					<tr id="chest_row">
-						<td id="chest_button"><button class="button" id="build_chest" onclick="shelter.upgrade(upgrades[2])">Build Chest</button></td>
+						<td id="chest_button"><button class="button" id="build_chest" onclick="shelter.upgrade(playerAttributes.currentHome,upgrades[2])">Build Chest</button></td>
 						<td id="chest_cost">Cost</td>
 						<td id="chest_discription" class="discription">Discription</td>
 					</tr>
@@ -144,25 +144,32 @@
 						<td><h4>Home:</h4></td>
 					</tr>
 					<tr>
-						<td><span id="current_home"></span></td>
+						<td><span id="current_home">none</span></td>
+						<td><span id="current_integrity">0</span>/<span id="max_integrity">0</span></td>
+						<td><button id="repair_integrity" class="hidden" onclick="shelter.maintain(playerAttributes.currentHome)">Repair</button></td>
 					</tr>
 					<tr>
 						<td><h4>Storage:</h4></td>
 					</tr>
 					<tr>
-						<td>Food:<span id="current_food">0</span>/<span id="max_food">0</span></td>
+						<td>Food:</td>
+						<td><span id="current_food">0</span>/<span id="max_food">0</span></td>
 					</tr>
 					<tr>
-						<td>Water:<span id="current_water">0</span>/<span id="max_water">0</span></td>
+						<td>Water:</td>
+						<td><span id="current_water">0</span>/<span id="max_water">0</span></td>
 					</tr>
 					<tr>
-						<td>Ammo:<span id="current_ammo">0</span>/<span id="max_ammo">0</span></td>
+						<td>Ammo:</td>
+						<td><span id="current_ammo">0</span>/<span id="max_ammo">0</span></td>
 					</tr>
 					<tr>
-						<td>Scrap:<span id="current_scrap">0</span>/<span id="max_scrap">0</span></td>
+						<td>Scrap:</td>
+						<td><span id="current_scrap">0</span>/<span id="max_scrap">0</span></td>
 					</tr>
 					<tr>
-						<td>Medpacks:<span id="current_medpack">0</span>/<span id="max_medpack">0</span></td>
+						<td>Medpacks:</td>
+						<td><span id="current_medpack">0</span>/<span id="max_medpack">0</span></td>
 					</tr>
 				</tbody>
 			</table>

@@ -14,7 +14,8 @@ var playerAttributes = {
 	'dehydrated': false,
 	'rads': 10,
 	'sick': false,
-	'gameOver': false
+	'gameOver': false,
+	'currentHome': 'none'
 };
 var homeStorage = {
 	'maxStorage': {
@@ -188,6 +189,15 @@ function updateTotals() {
 	document.getElementById('crate_discription').innerHTML = upgrades[1].discription;
 	document.getElementById('chest_cost').innerHTML = upgrades[2].cost;
 	document.getElementById('chest_discription').innerHTML = upgrades[2].discription;
+	// Current home
+	if(playerAttributes.currentHome.name != undefined) {
+		document.getElementById('current_home').innerHTML = playerAttributes.currentHome.name;
+		document.getElementById('current_integrity').innerHTML = playerAttributes.currentHome.currentIntegrity;
+		document.getElementById('max_integrity').innerHTML = playerAttributes.currentHome.maxIntegrity;
+		if(playerAttributes.currentHome.currentIntegrity < playerAttributes.currentHome.maxIntegrity) {
+			document.getElementById('repair_integrity').className = "button";
+		}
+	}
 	// Storage counts
 	document.getElementById('current_food').innerHTML = homeStorage.currentStorage.food;
 	document.getElementById('max_food').innerHTML = homeStorage.maxStorage.food;
@@ -357,6 +367,7 @@ var shelter = {
 			scrap.total -= structure.cost;
 			structure.isBuildable = false;
 			structure.isBuilt = true;
+			playerAttributes.currentHome = structure;
 			// Initial building integrity is a random value between max and 10 less then max, rounded down.
 			structure.currentIntegrity = Math.floor(rand((structure.maxIntegrity - 10), structure.maxIntegrity)).toFixed(0)
 			gameLog("Completed building " + structure.name + " with integrity of " + structure.currentIntegrity);
@@ -378,21 +389,25 @@ var shelter = {
 	},
 
 	upgrade: function(structure, upgrade) {
-		if(structure.isBuilt && structure.upgrades < structure.upgradeSlots && scrap.total >= upgrade.cost) {
+		if(structure.isBuilt && upgrade.isBuilt) {
+			gameLog("You already built a " + upgrade.name)
+		} else if(structure.isBuilt && structure.upgrades < structure.upgradeSlots && scrap.total >= upgrade.cost) {
 			if(upgrade.type == 'storage') {
+				scrap.total -= structure.cost;
 				// homeStorage.maxStorage increased by upgrade.maxStorage
+				upgrade.isBuilt = true;
 				homeStorage.maxStorage.food = upgrade.maxStorage.food;
 				homeStorage.maxStorage.water = upgrade.maxStorage.water;
 				homeStorage.maxStorage.ammo = upgrade.maxStorage.ammo;
 				homeStorage.maxStorage.scrap = upgrade.maxStorage.scrap;
 				homeStorage.maxStorage.medpack = upgrade.maxStorage.medpack;
 				gameLog("Built a " + upgrade.name + " in your " + structure.name);
+			} else {
+				var needed = upgrade.cost - scrap.total;
+				gameLog("Not enough scrap. Need " + needed + " more.");
 			}
-		} else {
-			var needed = upgrade.cost - scrap.total;
-			gameLog("Not enough scrap. Need " + needed + " more.");
 		}
-	},
+	}
 }
 
 // In-game log message
@@ -523,14 +538,8 @@ var upgrades = [
 			'scrap': 10,
 			'medpack': 10
 		},
-		'totalStorage': {
-			'food': 0,
-			'water': 0,
-			'ammo': 0,
-			'scrap': 0,
-			'medpack': 0
-		},
-		'cost': '20'
+		'cost': '20',
+		'isBuilt': false
 	},
 	crate = {
 		'name': 'crate',
@@ -541,16 +550,10 @@ var upgrades = [
 			'water': 20,
 			'ammo': 20,
 			'scrap': 20,
-			'medpack': 120
+			'medpack': 20
 		},
-		'totalStorage': {
-			'food': 0,
-			'water': 0,
-			'ammo': 0,
-			'scrap': 0,
-			'medpack': 0
-		},
-		'cost': '50'
+		'cost': '50',
+		'isBuilt': false
 	},
 	chest = {
 		'name': 'chest',
@@ -563,13 +566,7 @@ var upgrades = [
 			'scrap': 50,
 			'medpack': 50
 		},
-		'totalStorage': {
-			'food': 0,
-			'water': 0,
-			'ammo': 0,
-			'scrap': 0,
-			'medpack': 0
-		},
-		'cost': '100'
+		'cost': '100',
+		'isBuilt': false
 	}
 ]
