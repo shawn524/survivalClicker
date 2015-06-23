@@ -367,7 +367,6 @@ var shelter = {
 			gameLog("You already built a " + structure.name);
 		} else if(structure.cost <= scrap.total) {
 			scrap.total -= structure.cost;
-			structure.isBuildable = false;
 			structure.isBuilt = true;
 			playerAttributes.currentHome = structure;
 			// Initial building integrity is a random value between max and 10 less then max, rounded down.
@@ -498,7 +497,7 @@ var buildings = [
 		'name': 'hole',
 		'discription': "A modest hole.",
 		'isBuildable': false,
-		'cost': 40,
+		'cost': 20,
 		'maxIntegrity': 20,
 		'currentIntegrity': 0,
 		'upgradeSlots': 1,
@@ -512,8 +511,8 @@ var buildings = [
 		'name': 'shack',
 		'discription': "Basically a metal tent.",
 		'isBuildable': false,
-		'cost': 80,
-		'maxIntegrity': 40,
+		'cost': 40,
+		'maxIntegrity': 30,
 		'currentIntegrity': 0,
 		'upgradeSlots': 1,
 		'upgrades': 0,
@@ -526,8 +525,8 @@ var buildings = [
 		'name': 'hut',
 		'discription': "Sturdy looking thing.",
 		'isBuildable': false,
-		'cost': 120,
-		'maxIntegrity': 60,
+		'cost': 60,
+		'maxIntegrity': 50,
 		'currentIntegrity': 0,
 		'upgradeSlots': 2,
 		'upgrades': 0,
@@ -552,7 +551,7 @@ var upgrades = [
 			'scrap': 10,
 			'medpack': 10
 		},
-		'cost': '20',
+		'cost': 20,
 		'isBuilt': false
 	},
 	crate = {
@@ -566,7 +565,7 @@ var upgrades = [
 			'scrap': 20,
 			'medpack': 20
 		},
-		'cost': '50',
+		'cost': 30,
 		'isBuilt': false
 	},
 	chest = {
@@ -580,7 +579,7 @@ var upgrades = [
 			'scrap': 50,
 			'medpack': 50
 		},
-		'cost': '100',
+		'cost': 60,
 		'isBuilt': false
 	}
 ]
