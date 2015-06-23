@@ -84,7 +84,7 @@
 		<div id="selectors">
 			<div id="selectBuildings" class="paneSelector selected" onclick="paneSelect(&#39;buildings&#39;)">Buildings</div>
 			<div id="selectUpgrades" class="paneSelector" onclick="paneSelect(&#39;upgrades&#39;)">Upgrades</div>
-			<div id="selectStorage" class="paneSelector" onclick="paneSelect(&#39;storage&#39;)">Storage</div>
+			<div id="selectHome" class="paneSelector" onclick="paneSelect(&#39;home&#39;)">Home</div>
 		</div>
 		
 		<div id="buildingsPane">
@@ -137,9 +137,15 @@
 			</table>
 		</div>
 		
-		<div id="storagePane">
-			<table id="storage">
+		<div id="homePane">
+			<table id="home">
 				<tbody class="_hidden">
+					<tr>
+						<td><h4>Home:</h4></td>
+					</tr>
+					<tr>
+						<td><span id="current_home"></span></td>
+					</tr>
 					<tr>
 						<td><h4>Storage:</h4></td>
 					</tr>

@@ -42,7 +42,7 @@ body {
 }
 
 #upgradesPane,
-#storagePane {
+#homePane {
 	float: left;
 	clear: left;
 	display: none;
@@ -50,7 +50,7 @@ body {
 
 #buildings,
 #upgrades,
-#storage {
+#home {
 	width: 100%;
 }
 
@@ -64,7 +64,7 @@ body {
 	margin-right: 20px;
 }
 
-#storage button {
+#home button {
 	width: 100px;
 	margin-right: 20px;
 }

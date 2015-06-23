@@ -426,26 +426,26 @@ function paneSelect(name){
 	if (name == 'buildings'){
 		document.getElementById("buildingsPane").style.display = "block";
 		document.getElementById("upgradesPane").style.display = "none";
-		document.getElementById("storagePane").style.display = "none";
+		document.getElementById("homePane").style.display = "none";
 		document.getElementById("selectBuildings").className = "paneSelector selected";
 		document.getElementById("selectUpgrades").className = "paneSelector";
-		document.getElementById("selectStorage").className = "paneSelector";
+		document.getElementById("selectHome").className = "paneSelector";
 	}
 	if (name == 'upgrades'){
 		document.getElementById("buildingsPane").style.display = "none";
 		document.getElementById("upgradesPane").style.display = "block";
-		document.getElementById("storagePane").style.display = "none";
+		document.getElementById("homePane").style.display = "none";
 		document.getElementById("selectBuildings").className = "paneSelector";
 		document.getElementById("selectUpgrades").className = "paneSelector selected";
-		document.getElementById("selectStorage").className = "paneSelector";
+		document.getElementById("selectHome").className = "paneSelector";
 	}
-	if (name == 'storage'){
+	if (name == 'home'){
 		document.getElementById("buildingsPane").style.display = "none";
 		document.getElementById("upgradesPane").style.display = "none";
-		document.getElementById("storagePane").style.display = "block";
+		document.getElementById("homePane").style.display = "block";
 		document.getElementById("selectBuildings").className = "paneSelector";
 		document.getElementById("selectUpgrades").className = "paneSelector";
-		document.getElementById("selectStorage").className = "paneSelector selected";
+		document.getElementById("selectHome").className = "paneSelector selected";
 	}
 }
 
