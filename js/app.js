@@ -1,6 +1,6 @@
 // Survival Clicker
 // An incremental game with a post apocalyptic twist
-var version = 0.4;
+var version = 0.5;
 
 // Initialize values
 var playerAttributes = {
@@ -72,6 +72,7 @@ var basicSupplies = [food, water, ammo, scrap, medpack, nothing];
 var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance, nothing.chance];
 var lesserMulti = 1;
 var greaterMulti = 1;
+var clicks = 0;
 var daysSurvived = 0;
 
 // Generates a random number between min and max.
@@ -109,6 +110,7 @@ var gatherSupplies = function(basicSupplies, weight) {
 
 	// 10 clicks to a day
 	daysSurvived += 0.1;
+	clicks += 1;
 	// Apply certain functions when button pressed to progress game
 	updateTotals();
 	applyStatusEffect();
@@ -149,7 +151,8 @@ function deathCheck() {
 }
 
 function resetGame() {
-	if (confirm("Reset game?")) {
+	gameLog("You survived " + daysSurvived.toFixed(0) + " days.");
+	gameLog("You clicked " + clicks + " times.")
 		playerAttributes.health = 100;
 		playerAttributes.hunger = 0;
 		playerAttributes.hungry = false;
@@ -171,16 +174,20 @@ function resetGame() {
 		homeStorage.maxStorage.ammo = 0;
 		homeStorage.maxStorage.scrap = 0;
 		homeStorage.maxStorage.medpack = 0;
+		buildings[0].isBuilt = false;
+		buildings[1].isBuilt = false;
+		buildings[2].isBuilt = false;
+		upgrades[0].isBuilt = false;
+		upgrades[1].isBuilt = false;
+		upgrades[2].isBuilt = false;
 		food.total = 0;
 		water.total = 0;
 		ammo.total = 0;
 		scrap.total = 0;
 		medpack.total = 0;
 		daysSurvived = 0;
+		clicks = 0;
 		gameLog("Game reset.")
-	} else {
-		// disable buttons?
-	}
 }
 
 function updateTotals() {
@@ -218,7 +225,13 @@ function updateTotals() {
 		document.getElementById('max_integrity').innerHTML = playerAttributes.currentHome.maxIntegrity;
 		if(playerAttributes.currentHome.currentIntegrity < playerAttributes.currentHome.maxIntegrity) {
 			document.getElementById('repair_integrity').className = "button";
+		} else {
+			document.getElementById('repair_integrity').className = "hidden";
 		}
+	} else {
+		document.getElementById('current_home').innerHTML = 'none';
+		document.getElementById('current_integrity').innerHTML = 0;
+		document.getElementById('max_integrity').innerHTML = 0;
 	}
 	// Storage counts
 	document.getElementById('current_food').innerHTML = homeStorage.currentStorage.food;
