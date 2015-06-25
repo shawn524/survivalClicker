@@ -70,6 +70,30 @@ var nothing = {
 	chance: 0.3,
 };
 
+var rareLoot = {
+	handgun: {
+		'name': 'handgun',
+		'power': 2,
+		'chance': 0.2
+	},
+	hunting: {
+		'name': 'hunting rifle',
+		'power': 4,
+		'chance': 0.1
+	},
+	assault: {
+		'name': 'assault rifle',
+		'power': 8,
+		'chance': 0.05
+	},
+	nothing: {
+		'chance': 0.6
+	},
+	chance: 0.05
+}
+
+
+
 var basicSupplies = [food, water, ammo, scrap, medpack, nothing];
 var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance, nothing.chance];
 var lesserMulti = 1;
@@ -103,8 +127,7 @@ var weightedRand = function(list, weight) {
 		var result = list[i];
 
 		if (random_num <= weight_sum) {
-			result.total++;
-			return list[i].name;
+			return list[i];
 		}
 	}
 };
@@ -113,7 +136,7 @@ var weightedRand = function(list, weight) {
 var gatherSupplies = function() {
 	var foundItem = weightedRand(basicSupplies, weight);
 	foundItem.total++
-	gameLog("Found " + foundItem)
+	gameLog("Found " + foundItem.name)
 
 	// 10 clicks to a day
 	daysSurvived += 0.1;
@@ -624,3 +647,4 @@ var upgrades = [
 		'isBuilt': false
 	}
 ]
+
