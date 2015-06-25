@@ -15,7 +15,9 @@ var playerAttributes = {
 	'rads': 10,
 	'sick': false,
 	'gameOver': false,
-	'currentHome': 'none'
+	'currentHome': 'none',
+	'armed': false,
+	'dangerous': false
 };
 var homeStorage = {
 	'maxStorage': {
@@ -80,10 +82,10 @@ var rand = function(min, max) {
 	return Math.random() * (max - min) + min;
 };
 
-// This function is the main click action. 
+// Broken out function for weighted-random
 // It can take all of the basic supplies you might find and return
 // a single random-weighted result as a loot drop. 
-var gatherSupplies = function(basicSupplies, weight) {
+var weightedRand = function(list, weight) {
 	var total_weight = weight.reduce(function(prev, cur, i, arr) {
 		return prev + cur;
 	});
@@ -93,20 +95,25 @@ var gatherSupplies = function(basicSupplies, weight) {
 	// console.log('random num', random_num);
 	var weight_sum = 0;
 
-	for (var i = 0; i < basicSupplies.length; i++) {
+	for (var i = 0; i < list.length; i++) {
 		weight_sum += weight[i];
 		// console.log(weight[i]);
 		weight_sum = +weight_sum.toFixed(2);
 		// console.log('weight sum',weight_sum);
-		var item_drop = basicSupplies[i];
+		var result = list[i];
 
 		if (random_num <= weight_sum) {
-			item_drop.total++;
-			// console.log('found some', basicSupplies[i].name);
-			gameLog('You found some ' + basicSupplies[i].name);
-			break;
+			result.total++;
+			return list[i].name;
 		}
 	}
+};
+
+// This function is the main click action. 
+var gatherSupplies = function() {
+	var foundItem = weightedRand(basicSupplies, weight);
+	foundItem.total++
+	gameLog("Found " + foundItem)
 
 	// 10 clicks to a day
 	daysSurvived += 0.1;
@@ -116,7 +123,6 @@ var gatherSupplies = function(basicSupplies, weight) {
 	applyStatusEffect();
 	playerStatsRemoval();
 	deathCheck();
-
 };
 
 function playerStatsRemoval() {
