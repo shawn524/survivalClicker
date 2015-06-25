@@ -16,6 +16,7 @@ var playerAttributes = {
 	'sick': false,
 	'gameOver': false,
 	'currentHome': 'none',
+	'power': 0,
 	'armed': false,
 	'dangerous': false
 };
@@ -74,7 +75,7 @@ var rareLoot = {
 	handgun: {
 		'name': 'handgun',
 		'power': 2,
-		'chance': 0.2
+		'chance': 0.1
 	},
 	hunting: {
 		'name': 'hunting rifle',
@@ -87,15 +88,17 @@ var rareLoot = {
 		'chance': 0.05
 	},
 	nothing: {
-		'chance': 0.6
+		'chance': 0.8
 	},
-	chance: 0.05
+	chance: 0.05,
 }
 
 
 
-var basicSupplies = [food, water, ammo, scrap, medpack, nothing];
-var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance, nothing.chance];
+var basicSupplies = [food, water, ammo, scrap, medpack, nothing, rareLoot];
+var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance, nothing.chance, rareLoot.chance];
+var rareList = [rareLoot.handgun, rareLoot.hunting, rareLoot.assault, rareLoot.nothing];
+var rareWeight = [rareLoot.handgun.chance, rareLoot.hunting.chance, rareLoot.assault.chance, rareLoot.nothing.chance];
 var lesserMulti = 1;
 var greaterMulti = 1;
 var clicks = 0;
@@ -135,8 +138,41 @@ var weightedRand = function(list, weight) {
 // This function is the main click action. 
 var gatherSupplies = function() {
 	var foundItem = weightedRand(basicSupplies, weight);
-	foundItem.total++
-	gameLog("Found " + foundItem.name)
+	// console.log(foundItem);
+	// Rare loot will start showing up after 5 days in-game
+	// so far it's just weapons that will add to your damage.
+	// if you already found that weapon, or you have a better one,
+	// it won't overwrite what you have
+	if(foundItem == rareLoot && daysSurvived > 5) {
+		var rareItem = weightedRand(rareList, rareWeight);
+		// console.log(rareItem);
+		if(rareItem == rareLoot.handgun && playerAttributes.power >= 0 && playerAttributes.power < 2) {
+			playerAttributes.power = rareItem.power;
+			playerAttributes.armed = true;
+			gameLog("Found an old handgun!");
+		} else if(rareItem == rareLoot.hunting && playerAttributes.power >= 0 && playerAttributes.power < 4) {
+			playerAttributes.power = rareItem.power;
+			playerAttributes.armed = true;
+			gameLog("Found a descent looking hunting rifle!");
+		} else if(rareItem == rareLoot.assault && playerAttributes.armed && playerAttributes.power < 8) {
+			playerAttributes.power = rareItem.power;
+			playerAttributes.dangerous = true;
+			gameLog("Found an assault rifle! Oh boy!");			
+		} else if(rareItem == rareLoot.nothing) {
+			gameLog("Found nothing")
+		}
+	// if < 5 days, you get some ammo instead
+	} else if(foundItem == rareLoot && daysSurvived < 5) {
+		console.log('rare :(');
+		foundItem = ammo;
+		foundItem.total++;
+		gameLog("Found " + foundItem.name);
+	// if not rare, regular item
+	} else {
+		foundItem.total++
+		gameLog("Found " + foundItem.name);
+	}
+
 
 	// 10 clicks to a day
 	daysSurvived += 0.1;
@@ -548,7 +584,7 @@ window.setInterval(function() {
 	updateTotals();
 	applyStatusEffect();
 	deathCheck();
-	// console.log('multi ' + (lesserMulti * greaterMulti))
+	heal();
 }, 1000);
 
 
@@ -648,3 +684,11 @@ var upgrades = [
 	}
 ]
 
+/* debug & testing */
+function heal() {
+	playerAttributes.health = 100;
+	playerAttributes.hunger = 0;
+	playerAttributes.thirst = 0;
+	playerAttributes.rads = 0;
+
+}
