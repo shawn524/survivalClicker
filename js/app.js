@@ -16,7 +16,8 @@ var playerAttributes = {
 	'sick': false,
 	'gameOver': false,
 	'currentHome': 'none',
-	'power': 0,
+	'offense': 0,
+	'defense': 0,
 	'armed': false,
 	'dangerous': false
 };
@@ -74,17 +75,17 @@ var nothing = {
 var rareLoot = {
 	handgun: {
 		'name': 'handgun',
-		'power': 2,
+		'offense': 2,
 		'chance': 0.1
 	},
 	hunting: {
 		'name': 'hunting rifle',
-		'power': 4,
+		'offense': 4,
 		'chance': 0.1
 	},
 	assault: {
 		'name': 'assault rifle',
-		'power': 8,
+		'offense': 8,
 		'chance': 0.05
 	},
 	nothing: {
@@ -93,12 +94,11 @@ var rareLoot = {
 	chance: 0.05,
 }
 
-
-
 var basicSupplies = [food, water, ammo, scrap, medpack, nothing, rareLoot];
 var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance, nothing.chance, rareLoot.chance];
 var rareList = [rareLoot.handgun, rareLoot.hunting, rareLoot.assault, rareLoot.nothing];
 var rareWeight = [rareLoot.handgun.chance, rareLoot.hunting.chance, rareLoot.assault.chance, rareLoot.nothing.chance];
+var inCombat = false;
 var lesserMulti = 1;
 var greaterMulti = 1;
 var clicks = 0;
@@ -146,16 +146,16 @@ var gatherSupplies = function() {
 	if(foundItem == rareLoot && daysSurvived > 5) {
 		var rareItem = weightedRand(rareList, rareWeight);
 		// console.log(rareItem);
-		if(rareItem == rareLoot.handgun && playerAttributes.power >= 0 && playerAttributes.power < 2) {
-			playerAttributes.power = rareItem.power;
+		if(rareItem == rareLoot.handgun && playerAttributes.offense >= 0 && playerAttributes.offense < 2) {
+			playerAttributes.offense = rareItem.offense;
 			playerAttributes.armed = true;
 			gameLog("Found an old handgun!");
-		} else if(rareItem == rareLoot.hunting && playerAttributes.power >= 0 && playerAttributes.power < 4) {
-			playerAttributes.power = rareItem.power;
+		} else if(rareItem == rareLoot.hunting && playerAttributes.offense >= 0 && playerAttributes.offense < 4) {
+			playerAttributes.offense = rareItem.offense;
 			playerAttributes.armed = true;
 			gameLog("Found a descent looking hunting rifle!");
-		} else if(rareItem == rareLoot.assault && playerAttributes.armed && playerAttributes.power < 8) {
-			playerAttributes.power = rareItem.power;
+		} else if(rareItem == rareLoot.assault && playerAttributes.armed && playerAttributes.offense < 8) {
+			playerAttributes.offense = rareItem.offense;
 			playerAttributes.dangerous = true;
 			gameLog("Found an assault rifle! Oh boy!");			
 		} else if(rareItem == rareLoot.nothing) {
@@ -683,6 +683,54 @@ var upgrades = [
 		'isBuilt': false
 	}
 ]
+
+var encounterTypes = [
+	enemies = {
+		'thug': {
+			'name': 'thug',
+			'offense': 0.5,
+			'defense': 0.7,
+			'chance': 0.3
+		},
+		'vandal': {
+			'name': 'vandal',
+			'offense': 0.8,
+			'defense': 1.0,
+			'chance': 0.3
+		},
+		'raider': {
+			'name': 'raider',
+			'offense': 1.0,
+			'defense': 1.2,
+			'chance': 0.2
+		},
+		'mercenary': {
+			'name': 'mercenary',
+			'offense': 1.5,
+			'defense': 2.0,
+			'chance': 0.2
+		}
+	}
+]
+
+var enemiesList = [encounterTypes[0].thug, encounterTypes[0].vandal, encounterTypes[0].raider, encounterTypes[0].mercenary];
+var enemiesWeight = [encounterTypes[0].thug.chance, encounterTypes[0].vandal.chance, encounterTypes[0].raider.chance, encounterTypes[0].mercenary.chance];
+
+// Enemy constructor
+function Enemy(name, offense, defense) {
+	this.name = name;
+	this.type = 'hostile';
+	this.health = rand(20, 100).toFixed(0);
+	this.offense = offense;
+	this.defense = defense;
+	this.loot = {
+		'food': rand(1,20).toFixed(0),
+		'water': rand(1,20).toFixed(0),
+		'ammo': rand(1,20).toFixed(0),
+		'scrap': rand(1,30).toFixed(0),
+		'medpack': rand(1,10).toFixed(0)
+	};
+}
 
 /* debug & testing */
 function heal() {
