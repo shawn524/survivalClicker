@@ -732,6 +732,46 @@ function Enemy(name, offense, defense) {
 	};
 }
 
+
+function newEncounter() {
+	var type = weightedRand(enemiesList, enemiesWeight);
+	encounter = new Enemy(type.name, type.offense, type.defense);
+	document.getElementById("enemyHealth").innerHTML = encounter.health;
+	document.getElementById("enemyType").innerHTML = encounter.name;
+	console.log(encounter.health);
+	console.log(encounter.name);
+	inCombat = true;
+	return encounter;
+}
+
+function attack(attacker) {
+	var damage = attacker.offense * rand(2,5);
+	console.log('attack',damage);
+	return damage.toFixed(0);
+}
+
+function defend(defender) {
+	var block = defender.defense * rand(1,5);
+	console.log('block',block);
+	return block.toFixed(0);
+}
+
+function fight(attacker, defender) {
+	var atk = attack(attacker);
+	var def = defend(defender);
+	var damage = atk - def;
+	if(damage < 0) {
+		damage = 0;
+	}
+
+	defender.health -= damage;
+	console.log('damage',damage)
+
+	document.getElementById("enemyHealth").innerHTML = encounter.health;
+	document.getElementById("yourHealth").innerHTML = player.health;
+}
+
+
 /* debug & testing */
 function heal() {
 	playerAttributes.health = 100;

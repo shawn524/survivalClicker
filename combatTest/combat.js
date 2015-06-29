@@ -2,26 +2,26 @@ var encounterTypes = [
 	enemies = {
 		'thug': {
 			'name': 'thug',
-			'offense': 0.5,
-			'defense': 0.7,
+			'offense': 1,
+			'defense': 2,
 			'chance': 0.3
 		},
 		'vandal': {
 			'name': 'vandal',
-			'offense': 0.8,
-			'defense': 1.0,
+			'offense': 2,
+			'defense': 3,
 			'chance': 0.3
 		},
 		'raider': {
 			'name': 'raider',
-			'offense': 1.0,
-			'defense': 1.2,
+			'offense': 3,
+			'defense': 4,
 			'chance': 0.2
 		},
 		'mercenary': {
 			'name': 'mercenary',
-			'offense': 1.5,
-			'defense': 2.0,
+			'offense': 4,
+			'defense': 5,
 			'chance': 0.2
 		}
 	}
@@ -42,7 +42,7 @@ var player = {
 	'gameOver': false,
 	'currentHome': 'none',
 	'offense': 2,
-	'defense': 1,
+	'defense': 2,
 	'armed': false,
 	'dangerous': false
 };
@@ -98,7 +98,12 @@ var rand = function(min, max) {
 
 var playerAction = 'wait';
 var encounter = '';
-
+var inputTimeout = setTimeout(10000, function() {
+    // This is an anonymous function that will be called when the timer goes off.
+    alert('timeout')
+    // Remove the answer so the user can't click it anymore, etc...
+    playerAction = 'wait';
+});
 
 
 function newEncounter() {
@@ -108,45 +113,36 @@ function newEncounter() {
 	document.getElementById("enemyType").innerHTML = encounter.name;
 	console.log(encounter.health);
 	console.log(encounter.name);
+	inCombat = true;
 	return encounter;
 }
 
 function attack(attacker) {
-	var damage = attacker.offense * rand(1,5);
+	var damage = attacker.offense * rand(2,5);
+	console.log('attack',damage);
 	return damage.toFixed(0);
 }
 
 function defend(defender) {
 	var block = defender.defense * rand(1,5);
+	console.log('block',block);
 	return block.toFixed(0);
 }
 
 function fight(attacker, defender) {
-	var a = attack(attacker);
-	var b = defend(defender);
-	var damage = a - b;
+	var atk = attack(attacker);
+	var def = defend(defender);
+	var damage = atk - def;
 	if(damage < 0) {
 		damage = 0;
 	}
 
 	defender.health -= damage;
-	console.log(damage)
+	console.log('damage',damage)
 
 	document.getElementById("enemyHealth").innerHTML = encounter.health;
 	document.getElementById("yourHealth").innerHTML = player.health;
-	// return damage.toFixed(0);
 }
-
-
-
-
-function combat() {
-
-
-}
-
-
-
 
 
 
