@@ -3,7 +3,7 @@
 var version = 0.5;
 
 // Initialize values
-var playerAttributes = {
+var player = {
 	'name': 'Pip',
 	'health': 100,
 	'hunger': 0,
@@ -103,6 +103,7 @@ var lesserMulti = 1;
 var greaterMulti = 1;
 var clicks = 0;
 var daysSurvived = 0;
+var encounter = '';
 
 // Generates a random number between min and max.
 var rand = function(min, max) {
@@ -146,17 +147,17 @@ var gatherSupplies = function() {
 	if(foundItem == rareLoot && daysSurvived > 5) {
 		var rareItem = weightedRand(rareList, rareWeight);
 		// console.log(rareItem);
-		if(rareItem == rareLoot.handgun && playerAttributes.offense >= 0 && playerAttributes.offense < 2) {
-			playerAttributes.offense = rareItem.offense;
-			playerAttributes.armed = true;
+		if(rareItem == rareLoot.handgun && player.offense >= 0 && player.offense < 2) {
+			player.offense = rareItem.offense;
+			player.armed = true;
 			gameLog("Found an old handgun!");
-		} else if(rareItem == rareLoot.hunting && playerAttributes.offense >= 0 && playerAttributes.offense < 4) {
-			playerAttributes.offense = rareItem.offense;
-			playerAttributes.armed = true;
+		} else if(rareItem == rareLoot.hunting && player.offense >= 0 && player.offense < 4) {
+			player.offense = rareItem.offense;
+			player.armed = true;
 			gameLog("Found a descent looking hunting rifle!");
-		} else if(rareItem == rareLoot.assault && playerAttributes.armed && playerAttributes.offense < 8) {
-			playerAttributes.offense = rareItem.offense;
-			playerAttributes.dangerous = true;
+		} else if(rareItem == rareLoot.assault && player.armed && player.offense < 8) {
+			player.offense = rareItem.offense;
+			player.dangerous = true;
 			gameLog("Found an assault rifle! Oh boy!");			
 		} else if(rareItem == rareLoot.nothing) {
 			gameLog("Found nothing")
@@ -185,31 +186,31 @@ var gatherSupplies = function() {
 };
 
 function playerStatsRemoval() {
-	playerAttributes.hunger += (1 * lesserMulti * greaterMulti);
-	playerAttributes.thirst += (1.2 * lesserMulti * greaterMulti);
-	playerAttributes.rads += (1.5 * lesserMulti * greaterMulti);
+	player.hunger += (1 * lesserMulti * greaterMulti);
+	player.thirst += (1.2 * lesserMulti * greaterMulti);
+	player.rads += (1.5 * lesserMulti * greaterMulti);
 	// Health removal
-	if (playerAttributes.hungry || playerAttributes.thirsty || playerAttributes.sick) {
-		playerAttributes.health -= (1 * lesserMulti * greaterMulti);
+	if (player.hungry || player.thirsty || player.sick) {
+		player.health -= (1 * lesserMulti * greaterMulti);
 	}
-	if (playerAttributes.starving || playerAttributes.dehydrated) {
-		playerAttributes.health -= (1 * lesserMulti * greaterMulti);
+	if (player.starving || player.dehydrated) {
+		player.health -= (1 * lesserMulti * greaterMulti);
 	}
 }
 
 function deathCheck() {
-	if (playerAttributes.health == 0 && !playerAttributes.gameOver) {
+	if (player.health == 0 && !player.gameOver) {
 		if(homeStorage.currentStorage.medpack > (homeStorage.maxStorage.medpack / 2)) {
 			alert("You manage to stumble blindly home and patch yourself up somehow. ");
 			gameLog("The will to live is strong.")
 			homeStorage.currentStorage.medpack = 0;
-			playerAttributes.health = 100;
-			playerAttributes.hunger = 0;
-			playerAttributes.thirst = 0;
-			playerAttributes.rads = 0;
+			player.health = 100;
+			player.hunger = 0;
+			player.thirst = 0;
+			player.rads = 0;
 		} else {
 			alert("You have succumbed to deaths cold embrace. Your journey has ended.")
-			playerAttributes.gameOver = true;
+			player.gameOver = true;
 			resetGame();
 		}
 	} 
@@ -218,17 +219,17 @@ function deathCheck() {
 function resetGame() {
 	gameLog("You survived " + daysSurvived.toFixed(0) + " days.");
 	gameLog("You clicked " + clicks + " times.")
-		playerAttributes.health = 100;
-		playerAttributes.hunger = 0;
-		playerAttributes.hungry = false;
-		playerAttributes.starving = false;
-		playerAttributes.thirst = 0;
-		playerAttributes.thirsty = false;
-		playerAttributes.dehydrated = false;
-		playerAttributes.rads = 10;
-		playerAttributes.sick = false;
-		playerAttributes.gameOver = false;
-		playerAttributes.currentHome = 'none';
+		player.health = 100;
+		player.hunger = 0;
+		player.hungry = false;
+		player.starving = false;
+		player.thirst = 0;
+		player.thirsty = false;
+		player.dehydrated = false;
+		player.rads = 10;
+		player.sick = false;
+		player.gameOver = false;
+		player.currentHome = 'none';
 		homeStorage.currentStorage.food = 0;
 		homeStorage.currentStorage.water = 0;
 		homeStorage.currentStorage.ammo = 0;
@@ -263,10 +264,10 @@ function updateTotals() {
 	document.getElementById('scrap_metal_count').innerHTML = scrap.total.toFixed(0);
 	document.getElementById('medical_supplies_count').innerHTML = medpack.total.toFixed(0);
 	// Attributes
-	document.getElementById('health_count').innerHTML = playerAttributes.health.toFixed(0);
-	document.getElementById('hunger_count').innerHTML = playerAttributes.hunger.toFixed(0);
-	document.getElementById('thirst_count').innerHTML = playerAttributes.thirst.toFixed(0);
-	document.getElementById('rads_count').innerHTML = playerAttributes.rads.toFixed(0);
+	document.getElementById('health_count').innerHTML = player.health.toFixed(0);
+	document.getElementById('hunger_count').innerHTML = player.hunger.toFixed(0);
+	document.getElementById('thirst_count').innerHTML = player.thirst.toFixed(0);
+	document.getElementById('rads_count').innerHTML = player.rads.toFixed(0);
 	// Days survived rounded down
 	document.getElementById('days_survived_count').innerHTML = Math.floor(daysSurvived).toFixed(0);
 	// Building costs and discriptions
@@ -284,11 +285,11 @@ function updateTotals() {
 	document.getElementById('chest_cost').innerHTML = upgrades[2].cost;
 	document.getElementById('chest_discription').innerHTML = upgrades[2].discription;
 	// Current home
-	if(playerAttributes.currentHome.name != undefined) {
-		document.getElementById('current_home').innerHTML = playerAttributes.currentHome.name;
-		document.getElementById('current_integrity').innerHTML = playerAttributes.currentHome.currentIntegrity;
-		document.getElementById('max_integrity').innerHTML = playerAttributes.currentHome.maxIntegrity;
-		if(playerAttributes.currentHome.currentIntegrity < playerAttributes.currentHome.maxIntegrity) {
+	if(player.currentHome.name != undefined) {
+		document.getElementById('current_home').innerHTML = player.currentHome.name;
+		document.getElementById('current_integrity').innerHTML = player.currentHome.currentIntegrity;
+		document.getElementById('max_integrity').innerHTML = player.currentHome.maxIntegrity;
+		if(player.currentHome.currentIntegrity < player.currentHome.maxIntegrity) {
 			document.getElementById('repair_integrity').className = "button";
 		} else {
 			document.getElementById('repair_integrity').className = "hidden";
@@ -313,65 +314,65 @@ function updateTotals() {
 
 function statsLimiter() {
 	// Player stats limiter
-	if (playerAttributes.health >= 100) {
-		playerAttributes.health = 100;
+	if (player.health >= 100) {
+		player.health = 100;
 	}
-	if (playerAttributes.hunger >= 100) {
-		playerAttributes.hunger = 100;
+	if (player.hunger >= 100) {
+		player.hunger = 100;
 	}
-	if (playerAttributes.thirst >= 100) {
-		playerAttributes.thirst = 100;
+	if (player.thirst >= 100) {
+		player.thirst = 100;
 	}
-	if (playerAttributes.rads >= 200) {
-		playerAttributes.rads = 200;
+	if (player.rads >= 200) {
+		player.rads = 200;
 	}
-	if (playerAttributes.health <= 0) {
-		playerAttributes.health = 0;
+	if (player.health <= 0) {
+		player.health = 0;
 	}
-	if (playerAttributes.hunger <= 0) {
-		playerAttributes.hunger = 0;
+	if (player.hunger <= 0) {
+		player.hunger = 0;
 	}
-	if (playerAttributes.thirst <= 0) {
-		playerAttributes.thirst = 0;
+	if (player.thirst <= 0) {
+		player.thirst = 0;
 	}
-	if (playerAttributes.rads <= 0) {
-		playerAttributes.rads = 0;
+	if (player.rads <= 0) {
+		player.rads = 0;
 	}
 }
 
 function applyStatusEffect() {
 	// Hunger
-	if (playerAttributes.hunger < 60) {
-		playerAttributes.hungry = false;
-		playerAttributes.starving = false;
-	} else if ((playerAttributes.hunger >= 60 && playerAttributes.hunger < 100) && !playerAttributes.starving) {
-		playerAttributes.hungry = true;
+	if (player.hunger < 60) {
+		player.hungry = false;
+		player.starving = false;
+	} else if ((player.hunger >= 60 && player.hunger < 100) && !player.starving) {
+		player.hungry = true;
 		gameLog("You are hungry");
-	} else if (playerAttributes.hunger >= 100) {
-		playerAttributes.hungry = false;
-		playerAttributes.starving = true;
+	} else if (player.hunger >= 100) {
+		player.hungry = false;
+		player.starving = true;
 		gameLog("You are starving");
 	};
 	// Thirst
-	if (playerAttributes.thirst < 60) {
-		playerAttributes.thirsty = false;
-		playerAttributes.dehydrated = false;
-	} else if ((playerAttributes.thirst >= 60 && playerAttributes.thirst < 100) && !playerAttributes.dehydrated) {
-		playerAttributes.thirsty = true;
+	if (player.thirst < 60) {
+		player.thirsty = false;
+		player.dehydrated = false;
+	} else if ((player.thirst >= 60 && player.thirst < 100) && !player.dehydrated) {
+		player.thirsty = true;
 		gameLog("You are thirsty");
-	} else if (playerAttributes.thirst >= 100) {
-		playerAttributes.thirsty = false;
-		playerAttributes.dehydrated = true;
+	} else if (player.thirst >= 100) {
+		player.thirsty = false;
+		player.dehydrated = true;
 		gameLog("You are dehydrated");
 	};
 	// Rad sickness
-	if (playerAttributes.rads < 100) {
-		playerAttributes.sick = false;
-	} else if (playerAttributes.rads >= 100 && playerAttributes.rads < 200) {
-		playerAttributes.sick = true;
+	if (player.rads < 100) {
+		player.sick = false;
+	} else if (player.rads >= 100 && player.rads < 200) {
+		player.sick = true;
 		gameLog("You have radiation sickness");
-	} else if (playerAttributes.rads == 200) {
-		playerAttributes.health = 0;
+	} else if (player.rads == 200) {
+		player.health = 0;
 	};
 };
 
@@ -380,44 +381,44 @@ function statusMulti() {
 	// Status multiplier
 	// Lesser status effects
 	// If none or one 
-	if (!playerAttributes.hungry && !playerAttributes.thirsty && !playerAttributes.sick) {
+	if (!player.hungry && !player.thirsty && !player.sick) {
 		lesserMulti = 1.0;
 	}
-	if (playerAttributes.hungry || playerAttributes.thirsty || playerAttributes.sick) {
+	if (player.hungry || player.thirsty || player.sick) {
 		lesserMulti = 1.5;
 	};
 	// If any two
-	if (playerAttributes.hungry && playerAttributes.thirsty) {
+	if (player.hungry && player.thirsty) {
 		lesserMulti = 3.0;
-	} else if (playerAttributes.hungry && playerAttributes.sick) {
+	} else if (player.hungry && player.sick) {
 		lesserMulti = 3.0;
-	} else if (playerAttributes.thirsty && playerAttributes.sick) {
+	} else if (player.thirsty && player.sick) {
 		lesserMulti = 3.0;
 	};
 	// If three
-	if (playerAttributes.hungry && playerAttributes.thirsty && playerAttributes.sick) {
+	if (player.hungry && player.thirsty && player.sick) {
 		lesserMulti = 4.5;
 	};
 
 	// Greater status effects
 	// If one or none
-	if (!playerAttributes.starving && !playerAttributes.dehydrated) {
+	if (!player.starving && !player.dehydrated) {
 		greaterMulti = 1.0;
 	}
-	if (playerAttributes.starving || playerAttributes.dehydrated) {
+	if (player.starving || player.dehydrated) {
 		greaterMulti = 2.0;
 	}
 	// If both
-	if (playerAttributes.starving && playerAttributes.dehydrated) {
+	if (player.starving && player.dehydrated) {
 		greaterMulti = 4.0;
 	}
 
 	// Display to player
 	// Hunger
-	if (playerAttributes.hungry) {
+	if (player.hungry) {
 		document.getElementById('hungry_status').className = "hungry_status";
 		document.getElementById('starving_status').className += " hidden";
-	} else if (playerAttributes.starving) {
+	} else if (player.starving) {
 		document.getElementById('starving_status').className = "starving_status";
 		document.getElementById('hungry_status').className += " hidden";
 	} else {
@@ -425,10 +426,10 @@ function statusMulti() {
 		document.getElementById('starving_status').className += " hidden";
 	};
 	// Thirst
-	if (playerAttributes.thirsty) {
+	if (player.thirsty) {
 		document.getElementById('thirsty_status').className = "thirsty_status";
 		document.getElementById('dehydrated_status').className += " hidden";
-	} else if (playerAttributes.dehydrated) {
+	} else if (player.dehydrated) {
 		document.getElementById('dehydrated_status').className = "dehydrated_status";
 		document.getElementById('thirsty_status').className += " hidden";
 	} else {
@@ -436,7 +437,7 @@ function statusMulti() {
 		document.getElementById('dehydrated_status').className += " hidden";
 	};
 	// Rad sickness
-	if (playerAttributes.sick) {
+	if (player.sick) {
 		document.getElementById('sick_status').className = "sick_status";
 	} else {
 		document.getElementById('sick_status').className += " hidden";
@@ -448,12 +449,12 @@ function useItem(item) {
 	if (item.total > 0) {
 		item.total -= 1;
 		if (item.name == 'medpack') {
-			playerAttributes.health += 20;
-			playerAttributes.rads -= 20;
+			player.health += 20;
+			player.rads -= 20;
 		} else if (item.name == 'food') {
-			playerAttributes.hunger -= 10;
+			player.hunger -= 10;
 		} else if (item.name == 'water') {
-			playerAttributes.thirst -= 12;
+			player.thirst -= 12;
 		}
 	} else {
 		gameLog('Not enough ' + item.name);
@@ -468,7 +469,7 @@ var shelter = {
 		} else if(structure.cost <= scrap.total) {
 			scrap.total -= structure.cost;
 			structure.isBuilt = true;
-			playerAttributes.currentHome = structure;
+			player.currentHome = structure;
 			// Initial building integrity is a random value between max and 10 less then max, rounded down.
 			structure.currentIntegrity = Math.floor(rand((structure.maxIntegrity - 10), structure.maxIntegrity)).toFixed(0)
 			gameLog("Completed building " + structure.name + " with integrity of " + structure.currentIntegrity);
@@ -584,7 +585,7 @@ window.setInterval(function() {
 	updateTotals();
 	applyStatusEffect();
 	deathCheck();
-	heal();
+	// heal();
 }, 1000);
 
 
@@ -684,6 +685,10 @@ var upgrades = [
 	}
 ]
 
+/*====================================================================================================*/
+// Enemies and combat
+
+// enemy types
 var encounterTypes = [
 	enemies = {
 		'thug': {
@@ -712,6 +717,7 @@ var encounterTypes = [
 		}
 	}
 ]
+
 
 var enemiesList = [encounterTypes[0].thug, encounterTypes[0].vandal, encounterTypes[0].raider, encounterTypes[0].mercenary];
 var enemiesWeight = [encounterTypes[0].thug.chance, encounterTypes[0].vandal.chance, encounterTypes[0].raider.chance, encounterTypes[0].mercenary.chance];
@@ -768,15 +774,13 @@ function fight(attacker, defender) {
 	console.log('damage',damage)
 
 	document.getElementById("enemyHealth").innerHTML = encounter.health;
-	document.getElementById("yourHealth").innerHTML = player.health;
 }
 
 
 /* debug & testing */
 function heal() {
-	playerAttributes.health = 100;
-	playerAttributes.hunger = 0;
-	playerAttributes.thirst = 0;
-	playerAttributes.rads = 0;
-
+	player.health = 100;
+	player.hunger = 0;
+	player.thirst = 0;
+	player.rads = 0;
 }

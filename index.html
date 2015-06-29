@@ -206,6 +206,26 @@
         	</tbody>
         </table>
 	</div> <!-- End log -->
+
+	<div id="combat_area" class="_hidden">
+		<h3>Combat!</h3>
+		<table id="combatTable">
+			<tbody>
+				<tr>
+					<td>Enemy: <span id="enemyType"></span></td>
+				</tr>
+				<tr>
+					<td>Enemy HP: <span id="enemyHealth">100</span></td>
+				</tr>
+				<tr>
+					<td>Actions: </td>
+					<td><button onclick="fight(player, encounter)">Attack</button></td>
+					<td><button onclick="fight(encounter, player)">Defend</button></td>
+					<td><button>Run</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 <script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>

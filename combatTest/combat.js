@@ -95,16 +95,7 @@ var rand = function(min, max) {
 	return Math.random() * (max - min) + min;
 };
 
-
-var playerAction = 'wait';
 var encounter = '';
-var inputTimeout = setTimeout(10000, function() {
-    // This is an anonymous function that will be called when the timer goes off.
-    alert('timeout')
-    // Remove the answer so the user can't click it anymore, etc...
-    playerAction = 'wait';
-});
-
 
 function newEncounter() {
 	var type = weightedRand(enemiesList, enemiesWeight);
