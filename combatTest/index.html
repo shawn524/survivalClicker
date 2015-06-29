@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="combat.js"></script>
+</head>
+<body>
+	<button onclick="newEncounter()">New encounter</button>
+	<br>
+	<br>
+	Your HP: <span id="yourHealth">100</span>
+	<br>
+	<br>
+	Enemy HP: <span id="enemyHealth">100</span>
+	<br>
+	Enemy Type: <span id="enemyType"></span>
+
+	<br>
+	<br>
+	Actions:
+	<button onclick="fight(player, encounter)">Attack</button>
+	<button onclick="fight(encounter, player)">Defend</button>
+	<button>Run</button>
+
+</body>
+</html>
