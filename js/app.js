@@ -71,7 +71,6 @@ var nothing = {
 	name: 'nothing',
 	chance: 0.3,
 };
-
 var rareLoot = {
 	handgun: {
 		'name': 'handgun',
@@ -103,6 +102,7 @@ var lesserMulti = 1;
 var greaterMulti = 1;
 var clicks = 0;
 var daysSurvived = 0;
+var daysSinceLastAttack = 0;
 var encounter = '';
 
 // Generates a random number between min and max.
@@ -177,6 +177,7 @@ var gatherSupplies = function() {
 
 	// 10 clicks to a day
 	daysSurvived += 0.1;
+	daysSinceLastAttack += 0.1;
 	clicks += 1;
 	// Apply certain functions when button pressed to progress game
 	updateTotals();
@@ -185,6 +186,7 @@ var gatherSupplies = function() {
 	deathCheck();
 };
 
+// increases stats and removes health
 function playerStatsRemoval() {
 	player.hunger += (1 * lesserMulti * greaterMulti);
 	player.thirst += (1.2 * lesserMulti * greaterMulti);
@@ -198,6 +200,7 @@ function playerStatsRemoval() {
 	}
 }
 
+// checks if the player is dead and kills the player if able
 function deathCheck() {
 	if (player.health == 0 && !player.gameOver) {
 		if(homeStorage.currentStorage.medpack > (homeStorage.maxStorage.medpack / 2)) {
@@ -216,6 +219,7 @@ function deathCheck() {
 	} 
 }
 
+// resets the game 
 function resetGame() {
 	gameLog("You survived " + daysSurvived.toFixed(0) + " days.");
 	gameLog("You clicked " + clicks + " times.")
@@ -256,6 +260,7 @@ function resetGame() {
 		gameLog("Game reset.")
 }
 
+// updates the html with different things
 function updateTotals() {
 	// Supplies
 	document.getElementById('food_count').innerHTML = food.total.toFixed(0);
@@ -312,6 +317,7 @@ function updateTotals() {
 	document.getElementById('max_medpack').innerHTML = homeStorage.maxStorage.medpack;
 };
 
+// Upper and lower limits on things
 function statsLimiter() {
 	// Player stats limiter
 	if (player.health >= 100) {
@@ -340,6 +346,7 @@ function statsLimiter() {
 	}
 }
 
+// checks player stats and applies status effects to the player
 function applyStatusEffect() {
 	// Hunger
 	if (player.hunger < 60) {
@@ -461,7 +468,8 @@ function useItem(item) {
 	}
 }
 
-// Build, maintain, and upgrade structures 
+// Build, maintain, and upgrade structures
+// also item storage
 var shelter = {
 	build: function(structure){
 		if(structure.isBuilt) {
@@ -585,8 +593,161 @@ window.setInterval(function() {
 	updateTotals();
 	applyStatusEffect();
 	deathCheck();
+	combat();
 	// heal();
 }, 1000);
+
+
+/*====================================================================================================*/
+// Enemies and combat
+
+// enemy types
+var encounterTypes = [
+	enemies = {
+		'thug': {
+			'name': 'Thug',
+			'offense': 1.0,
+			'defense': 1.5,
+			'chance': 0.3
+		},
+		'vandal': {
+			'name': 'Vandal',
+			'offense': 1.5,
+			'defense': 1.5,
+			'chance': 0.3
+		},
+		'raider': {
+			'name': 'Raider',
+			'offense': 2.0,
+			'defense': 3.0,
+			'chance': 0.2
+		},
+		'mercenary': {
+			'name': 'Mercenary',
+			'offense': 4.0,
+			'defense': 5.0,
+			'chance': 0.2
+		}
+	}
+]
+
+
+var enemiesList = [encounterTypes[0].thug, encounterTypes[0].vandal, encounterTypes[0].raider, encounterTypes[0].mercenary];
+var enemiesWeight = [encounterTypes[0].thug.chance, encounterTypes[0].vandal.chance, encounterTypes[0].raider.chance, encounterTypes[0].mercenary.chance];
+
+// Enemy constructor
+function Enemy(name, offense, defense) {
+	this.name = name;
+	this.type = 'hostile';
+	this.offense = offense;
+	this.defense = defense;
+	if(offense < 2) {
+		this.health = rand(20, 50).toFixed(0);
+		this.loot = {
+			'food': rand(1,10),
+			'water': rand(1,10),
+			'ammo': rand(1,10),
+			'scrap': rand(1,10),
+			'medpack': rand(1,10)
+		}
+	} else if(offense < 3) {
+		this.health = rand(20, 70).toFixed(0);
+		this.loot = {
+			'food': rand(1,20),
+			'water': rand(1,20),
+			'ammo': rand(1,20),
+			'scrap': rand(1,20),
+			'medpack': rand(1,20)
+		}
+	} else if(offense < 5) {
+		this.health = rand(20, 100).toFixed(0);
+		this.loot = {
+			'food': rand(1,30),
+			'water': rand(1,30),
+			'ammo': rand(1,30),
+			'scrap': rand(1,30),
+			'medpack': rand(1,30)
+		}
+	}
+}
+
+// generates new encounter and puts game into combat state
+function newEncounter() {
+	var type = weightedRand(enemiesList, enemiesWeight);
+	// won't generate merc if you haven't found the assault rifle cause he's tough
+	if(type.name == 'Mercenary' && !player.dangerous) {
+		type = weightedRand(enemiesList, enemiesWeight);
+	}
+	encounter = new Enemy(type.name, type.offense, type.defense);
+	document.getElementById("enemyHealth").innerHTML = encounter.health;
+	document.getElementById("enemyType").innerHTML = encounter.name;
+	// console.log(encounter.health);
+	// console.log(encounter.name);
+	inCombat = true;
+	return encounter;
+}
+
+function attack(attacker) {
+	var damage = attacker.offense * rand(2,5);
+	console.log('attack',damage);
+	return damage.toFixed(0);
+}
+
+function defend(defender) {
+	var block = defender.defense * rand(1,5);
+	console.log('block',block);
+	return block.toFixed(0);
+}
+
+// takes attack() and defend() as arguments and dukes them out
+function fight(attacker, defender) {
+	var atk = attack(attacker);
+	var def = defend(defender);
+	var damage = atk - def;
+	if(damage < 0) {
+		damage = 0;
+	}
+
+	defender.health -= damage;
+	console.log('damage',damage)
+	document.getElementById("enemyHealth").innerHTML = encounter.health;
+}
+
+function combat() {
+	// generate a new encounter at random
+	if(player.armed && !inCombat && daysSinceLastAttack > 6) {
+		var x = rand(1,1000)
+		console.log(x);
+		if(x > 700) {
+			newEncounter();
+			daysSinceLastAttack = 0;
+		}
+	}
+	
+
+
+	// when enemy dies, reset encounter, and add loot to inventory.
+	if(encounter.health <= 0) {
+		inCombat = false;
+		food.total += encounter.loot.food;
+		water.total += encounter.loot.water;
+		ammo.total += encounter.loot.ammo;
+		scrap.total += encounter.loot.scrap;
+		medpack.total += encounter.loot.medpack;
+		gameLog(encounter.loot.food.toFixed(0) + " food, " + encounter.loot.water.toFixed(0) + " water, " + encounter.loot.ammo.toFixed(0) + " ammo, " + encounter.loot.scrap.toFixed(0) + " scrap, and " + encounter.loot.medpack.toFixed(0) + " medpacks.");
+		gameLog("Found some items on the dead body:");
+		encounter = '';
+	}
+
+	if(inCombat) {
+		// reveal combat controls and disable gather button
+		document.getElementById('combat_area').className = " ";
+		document.getElementById('gather_button').disabled = true; 
+	} else {
+		document.getElementById('combat_area').className = "hidden";
+		document.getElementById('gather_button').disabled = false;
+	}
+}
 
 
 /*====================================================================================================*/
@@ -685,96 +846,7 @@ var upgrades = [
 	}
 ]
 
-/*====================================================================================================*/
-// Enemies and combat
 
-// enemy types
-var encounterTypes = [
-	enemies = {
-		'thug': {
-			'name': 'thug',
-			'offense': 0.5,
-			'defense': 0.7,
-			'chance': 0.3
-		},
-		'vandal': {
-			'name': 'vandal',
-			'offense': 0.8,
-			'defense': 1.0,
-			'chance': 0.3
-		},
-		'raider': {
-			'name': 'raider',
-			'offense': 1.0,
-			'defense': 1.2,
-			'chance': 0.2
-		},
-		'mercenary': {
-			'name': 'mercenary',
-			'offense': 1.5,
-			'defense': 2.0,
-			'chance': 0.2
-		}
-	}
-]
-
-
-var enemiesList = [encounterTypes[0].thug, encounterTypes[0].vandal, encounterTypes[0].raider, encounterTypes[0].mercenary];
-var enemiesWeight = [encounterTypes[0].thug.chance, encounterTypes[0].vandal.chance, encounterTypes[0].raider.chance, encounterTypes[0].mercenary.chance];
-
-// Enemy constructor
-function Enemy(name, offense, defense) {
-	this.name = name;
-	this.type = 'hostile';
-	this.health = rand(20, 100).toFixed(0);
-	this.offense = offense;
-	this.defense = defense;
-	this.loot = {
-		'food': rand(1,20).toFixed(0),
-		'water': rand(1,20).toFixed(0),
-		'ammo': rand(1,20).toFixed(0),
-		'scrap': rand(1,30).toFixed(0),
-		'medpack': rand(1,10).toFixed(0)
-	};
-}
-
-
-function newEncounter() {
-	var type = weightedRand(enemiesList, enemiesWeight);
-	encounter = new Enemy(type.name, type.offense, type.defense);
-	document.getElementById("enemyHealth").innerHTML = encounter.health;
-	document.getElementById("enemyType").innerHTML = encounter.name;
-	console.log(encounter.health);
-	console.log(encounter.name);
-	inCombat = true;
-	return encounter;
-}
-
-function attack(attacker) {
-	var damage = attacker.offense * rand(2,5);
-	console.log('attack',damage);
-	return damage.toFixed(0);
-}
-
-function defend(defender) {
-	var block = defender.defense * rand(1,5);
-	console.log('block',block);
-	return block.toFixed(0);
-}
-
-function fight(attacker, defender) {
-	var atk = attack(attacker);
-	var def = defend(defender);
-	var damage = atk - def;
-	if(damage < 0) {
-		damage = 0;
-	}
-
-	defender.health -= damage;
-	console.log('damage',damage)
-
-	document.getElementById("enemyHealth").innerHTML = encounter.health;
-}
 
 
 /* debug & testing */
