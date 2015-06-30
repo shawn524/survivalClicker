@@ -7,6 +7,9 @@
 <body>
 	<div id="main_body">
 		<div>
+			<h2><span id="player_name"></span></h2>
+		</div>
+		<div>
 			<h4>Days survived:  <span id="days_survived_count">0</span></h4>
 		</div>
 		<table id="basicSuppliesCount">
@@ -53,19 +56,19 @@
 				</tr>
 				<!-- Status effects -->
 				<tr>
-					<td><span class="hungry_status hidden" id="hungry_status"><em>Hungry</em></span></td>
+					<td><span class="status hidden" id="hungry_status"><em>Hungry</em></span></td>
 				</tr>
 				<tr>
-					<td><span class="starving_status hidden" id="starving_status"><em>Starving</em></span></td>
+					<td><span class="status hidden" id="starving_status"><em>Starving</em></span></td>
 				</tr>
 				<tr>
-					<td><span class="thirsty_status hidden" id="thirsty_status"><em>Thirsty</em></span></td>
+					<td><span class="status hidden" id="thirsty_status"><em>Thirsty</em></span></td>
 				</tr>
 				<tr>
-					<td><span class="dehydrated_status hidden" id="dehydrated_status"><em>Dehydrated</em></span></td>
+					<td><span class="status hidden" id="dehydrated_status"><em>Dehydrated</em></span></td>
 				</tr>
 				<tr>
-					<td><span class="sick_status hidden" id="sick_status"><em>Sick</em></span></td>
+					<td><span class="status hidden" id="sick_status"><em>Sick</em></span></td>
 				</tr>
 			</tbody>
 		</table>
@@ -186,9 +189,9 @@
         <table id="logTable">
             <tbody>
 	            <tr id="log0">
-	            	<td id="logT"></td>
-	            	<td id="logL"></td>
-	            	<td id="logR"></td>
+	            	<td id="logM"></td>
+	            	<td id="logS"></td>
+	            	<td id="logG"></td>
 	            </tr>
 		        <tr id="log1">
 		        	<td></td>
@@ -220,7 +223,7 @@
 				<tr>
 					<td>Actions: </td>
 					<td><button onclick="lastAction='attack'">Attack</button></td>
-					<td><button onclick="">Defend</button></td>
+					<!-- <td><button onclick="lastAction='defend'">Defend</button></td> -->
 					<td><button onclick="run()">Run!</button></td>
 				</tr>
 			</tbody>

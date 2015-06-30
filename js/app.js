@@ -1,6 +1,6 @@
 // Survival Clicker
 // An incremental game with a post apocalyptic twist
-var version = 0.5;
+var version = 0.6;
 
 // Initialize values
 var player = {
@@ -21,6 +21,8 @@ var player = {
 	'armed': false,
 	'dangerous': false
 };
+// Asks the player for a name
+player.name = prompt('What is your name', 'Pip')
 var homeStorage = {
 	'maxStorage': {
 		food: 0,
@@ -75,7 +77,7 @@ var rareLoot = {
 	handgun: {
 		'name': 'handgun',
 		'offense': 2,
-		'chance': 0.1
+		'chance': 0.2
 	},
 	hunting: {
 		'name': 'hunting rifle',
@@ -87,6 +89,21 @@ var rareLoot = {
 		'offense': 8,
 		'chance': 0.05
 	},
+	l_armor: {
+		'name': 'leather armor',
+		'defense': 3,
+		'chance': 0.2
+	},
+	bp_vest: {
+		'name': 'bulitproof vest',
+		'defense': 5,
+		'chance': 0.1
+	},
+	m_armor: {
+		'name': 'metal armor',
+		'defense': 10,
+		'chance': 0.05
+	},
 	nothing: {
 		'chance': 0.8
 	},
@@ -95,8 +112,8 @@ var rareLoot = {
 
 var basicSupplies = [food, water, ammo, scrap, medpack, nothing, rareLoot];
 var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance, nothing.chance, rareLoot.chance];
-var rareList = [rareLoot.handgun, rareLoot.hunting, rareLoot.assault, rareLoot.nothing];
-var rareWeight = [rareLoot.handgun.chance, rareLoot.hunting.chance, rareLoot.assault.chance, rareLoot.nothing.chance];
+var rareList = [rareLoot.handgun, rareLoot.hunting, rareLoot.assault, rareLoot.L_armor, rareLoot.bp_vest, rareLoot.M_armor, rareLoot.nothing];
+var rareWeight = [rareLoot.handgun.chance, rareLoot.hunting.chance, rareLoot.assault.chance, rareLoot.l_armor.chance, rareLoot.bp_vest.chance, rareLoot.m_armor.chance, rareLoot.nothing.chance];
 var inCombat = false;
 var lesserMulti = 1;
 var greaterMulti = 1;
@@ -112,8 +129,8 @@ var rand = function(min, max) {
 };
 
 // Broken out function for weighted-random
-// It can take all of the basic supplies you might find and return
-// a single random-weighted result as a loot drop. 
+// It takes two arrays. One a list of things, and the other their given chance.
+// It returns a single entry from the list based on the weight and the random number that was generated
 var weightedRand = function(list, weight) {
 	var total_weight = weight.reduce(function(prev, cur, i, arr) {
 		return prev + cur;
@@ -160,7 +177,16 @@ var gatherSupplies = function() {
 			player.offense = rareItem.offense;
 			player.dangerous = true;
 			gameLog("Found an assault rifle! Oh boy!");			
-		} else if(rareItem == rareLoot.nothing) {
+		} else if(rareItem == rareLoot.l_armor && player.defense >= 0 && player.defense < 2) {
+			player.defense = rareItem.defense;
+			gameLog("Found some old leather armor.")
+		} else if(rareItem == rareLoot.bp_vest && player.defense >= 0 && player.defense < 5) {
+			player.defense = rareItem.defense;
+			gameLog("Found a bulletproof vest.")
+		} else if(rareItem == rareLoot.m_armor && player.defense >= 0 && player.defense < 10) {
+			player.defense = rareItem.defense;
+			gameLog("Found some shiny metal armor. Enemies beware!")
+		}else if(rareItem == rareLoot.nothing) {
 			gameLog("Found nothing")
 		}
 	// if < 5 days, you get some ammo instead
@@ -235,6 +261,10 @@ function resetGame() {
 		player.sick = false;
 		player.gameOver = false;
 		player.currentHome = 'none';
+		player.offense = 0;
+		player.defense = 0;
+		player.armed = false;
+		player.dangerous = false;
 		homeStorage.currentStorage.food = 0;
 		homeStorage.currentStorage.water = 0;
 		homeStorage.currentStorage.ammo = 0;
@@ -257,12 +287,14 @@ function resetGame() {
 		scrap.total = 0;
 		medpack.total = 0;
 		daysSurvived = 0;
+		daysSinceLastAttack = 0;
 		clicks = 0;
 		gameLog("Game reset.")
 }
 
 // updates the html with different things
 function updateTotals() {
+	document.getElementById('player_name').innerHTML = player.name;
 	// Supplies
 	document.getElementById('food_count').innerHTML = food.total.toFixed(0);
 	document.getElementById('water_count').innerHTML = water.total.toFixed(0);
@@ -424,10 +456,10 @@ function statusMulti() {
 	// Display to player
 	// Hunger
 	if (player.hungry) {
-		document.getElementById('hungry_status').className = "hungry_status";
+		document.getElementById('hungry_status').className = "status";
 		document.getElementById('starving_status').className += " hidden";
 	} else if (player.starving) {
-		document.getElementById('starving_status').className = "starving_status";
+		document.getElementById('starving_status').className = "status";
 		document.getElementById('hungry_status').className += " hidden";
 	} else {
 		document.getElementById('hungry_status').className += " hidden";
@@ -435,10 +467,10 @@ function statusMulti() {
 	};
 	// Thirst
 	if (player.thirsty) {
-		document.getElementById('thirsty_status').className = "thirsty_status";
+		document.getElementById('thirsty_status').className = "status";
 		document.getElementById('dehydrated_status').className += " hidden";
 	} else if (player.dehydrated) {
-		document.getElementById('dehydrated_status').className = "dehydrated_status";
+		document.getElementById('dehydrated_status').className = "status";
 		document.getElementById('thirsty_status').className += " hidden";
 	} else {
 		document.getElementById('thirsty_status').className += " hidden";
@@ -446,7 +478,7 @@ function statusMulti() {
 	};
 	// Rad sickness
 	if (player.sick) {
-		document.getElementById('sick_status').className = "sick_status";
+		document.getElementById('sick_status').className = "status";
 	} else {
 		document.getElementById('sick_status').className += " hidden";
 	};
@@ -536,9 +568,9 @@ var shelter = {
 // In-game log message
 function gameLog(message) {
 	// Check to see if the last message was the same as this one, if so just increment the (xNumber) value
-	if (document.getElementById('logL').innerHTML == message) {
+	if (document.getElementById('logS').innerHTML == message) {
 		logRepeat += 1;
-		document.getElementById('log0').innerHTML = '<td id="logT">' + '</td><td id="logL">' + message + '</td><td id="logR">(x' + logRepeat + ')</td>';
+		document.getElementById('log0').innerHTML = '<td id="logM">' + '</td><td id="logS">' + message + '</td><td id="logG">(x' + logRepeat + ')</td>';
 	} else {
 		// Reset the (xNumber) value
 		logRepeat = 1
@@ -552,9 +584,9 @@ function gameLog(message) {
 		document.getElementById('log3').innerHTML = document.getElementById('log2').innerHTML
 		document.getElementById('log2').innerHTML = document.getElementById('log1').innerHTML
 		// Since ids need to be unique, log1 strips the ids from the log0 elements when copying the contents.
-		document.getElementById('log1').innerHTML = '<td>' + document.getElementById('logT').innerHTML + '</td><td>' + document.getElementById('logL').innerHTML + '</td><td>' + document.getElementById('logR').innerHTML + '</td>';
+		document.getElementById('log1').innerHTML = '<td>' + document.getElementById('logM').innerHTML + '</td><td>' + document.getElementById('logS').innerHTML + '</td><td>' + document.getElementById('logG').innerHTML + '</td>';
 		// Creates new contents with new message, and x1
-		document.getElementById('log0').innerHTML = '<td id="logT">' + '</td><td id="logL">' + message + '</td><td id="logR">(x' + logRepeat + ')</td>';
+		document.getElementById('log0').innerHTML = '<td id="logM">' + '</td><td id="logS">' + message + '</td><td id="logG">(x' + logRepeat + ')</td>';
 	}
 }
 
@@ -595,7 +627,6 @@ window.setInterval(function() {
 	applyStatusEffect();
 	deathCheck();
 	combat();
-	// heal();
 }, 1000);
 
 
@@ -688,19 +719,20 @@ function newEncounter() {
 
 function attack(attacker) {
 	var damage = attacker.offense * rand(2,5);
-	console.log('attack',damage);
+	// console.log('attack',damage);
 	return damage.toFixed(0);
 }
 
 function defend(defender) {
 	var block = defender.defense * rand(1,5);
-	console.log('block',block);
+	// console.log('block',block);
 	return block.toFixed(0);
 }
 
 function run() {
 	lastAction = 'run';
-	if(player.health >= encounter.health) {
+	var success = rand(1,100)
+	if(success >= 70) {
 		inCombat = false;
 		gameLog("You booked it and ran away from that " + encounter.name);
 		daysSinceLastAttack = 0;
@@ -738,11 +770,10 @@ function combat() {
 	if(lastAction == 'attack' && inCombat) {
 		if(ammo.total > 0) {
 			fight(player, encounter);
-			ammo.total -= 1;
+			useItem(ammo);
 		} else {
 			gameLog("Out of ammo!");
 		}
-
 	}
 
 	// encounter attacks player
