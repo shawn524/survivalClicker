@@ -103,6 +103,7 @@ var greaterMulti = 1;
 var clicks = 0;
 var daysSurvived = 0;
 var daysSinceLastAttack = 0;
+var lastAction = '';
 var encounter = '';
 
 // Generates a random number between min and max.
@@ -681,8 +682,6 @@ function newEncounter() {
 	encounter = new Enemy(type.name, type.offense, type.defense);
 	document.getElementById("enemyHealth").innerHTML = encounter.health;
 	document.getElementById("enemyType").innerHTML = encounter.name;
-	// console.log(encounter.health);
-	// console.log(encounter.name);
 	inCombat = true;
 	return encounter;
 }
@@ -699,6 +698,17 @@ function defend(defender) {
 	return block.toFixed(0);
 }
 
+function run() {
+	lastAction = 'run';
+	if(player.health >= encounter.health) {
+		inCombat = false;
+		gameLog("You booked it and ran away from that " + encounter.name);
+		daysSinceLastAttack = 0;
+	} else {
+		gameLog("You tried to run but the " + encounter.name + " gave chase!");
+	}
+}
+
 // takes attack() and defend() as arguments and dukes them out
 function fight(attacker, defender) {
 	var atk = attack(attacker);
@@ -709,7 +719,7 @@ function fight(attacker, defender) {
 	}
 
 	defender.health -= damage;
-	console.log('damage',damage)
+	gameLog(attacker.name + " shot " + defender.name + " for " + damage + "!");
 	document.getElementById("enemyHealth").innerHTML = encounter.health;
 }
 
@@ -721,11 +731,26 @@ function combat() {
 		if(x > 700) {
 			newEncounter();
 			daysSinceLastAttack = 0;
+			gameLog("A " + encounter.name + " attacks you!");
 		}
 	}
+
+	if(lastAction == 'attack' && inCombat) {
+		if(ammo.total > 0) {
+			fight(player, encounter);
+			ammo.total -= 1;
+		} else {
+			gameLog("Out of ammo!");
+		}
+
+	}
+
+	// encounter attacks player
+	if((lastAction == 'attack' || lastAction == 'run') && inCombat) {
+		fight(encounter, player);
+		lastAction = 'wait';
+	}
 	
-
-
 	// when enemy dies, reset encounter, and add loot to inventory.
 	if(encounter.health <= 0) {
 		inCombat = false;
@@ -843,7 +868,7 @@ var upgrades = [
 		},
 		'cost': 60,
 		'isBuilt': false
-	}
+	},
 ]
 
 
