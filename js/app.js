@@ -125,9 +125,9 @@ var encounter = '';
 player.name = prompt('What is your name', 'Pip')
 // game intro and some instruction
 gameLog("<strong>Good luck!</strong>")
-gameLog("Basically just click the big button and then sometimes the little ones")
-gameLog("Beware of the dangers lurking in the shadows")
-gameLog("You will find many things to help you along the way")
+gameLog("Basically just click the big button and then sometimes the little ones.")
+gameLog("Beware of the dangers lurking in the shadows.")
+gameLog("You will find many things to help you along the way.")
 gameLog("for as long as possible.")
 gameLog("The (current) goal of the game is to survive")
 
@@ -199,7 +199,7 @@ var gatherSupplies = function() {
 		}
 		// if < 5 days, you get some ammo instead
 	} else if (foundItem == rareLoot && daysSurvived < 5) {
-		console.log('rare :(');
+		console.log(':(');
 		foundItem = ammo;
 		foundItem.total++;
 		gameLog("Found " + foundItem.name);
@@ -256,8 +256,8 @@ function deathCheck() {
 
 // resets the game 
 function resetGame() {
-	gameLog("You survived " + daysSurvived.toFixed(0) + " days.");
-	gameLog("You clicked " + clicks + " times.")
+	gameLog("<em>You survived " + daysSurvived.toFixed(0) + " days.</em>");
+	gameLog("<em>You clicked " + clicks + " times.</em>")
 	player.health = 100;
 	player.hunger = 0;
 	player.hungry = false;
@@ -297,8 +297,9 @@ function resetGame() {
 	daysSurvived = 0;
 	daysSinceLastAttack = 0;
 	inCombat = false;
+	lastAction = 'wait';
 	clicks = 0;
-	gameLog("Game reset.")
+	gameLog("<strong>Game reset.</strong>")
 }
 
 // updates the html with different things
@@ -728,13 +729,13 @@ function newEncounter() {
 
 function attack(attacker) {
 	var damage = attacker.offense * rand(2, 5);
-	console.log('attack',damage);
+	// console.log('attack',damage);
 	return damage.toFixed(0);
 }
 
 function defend(defender) {
 	var block = defender.defense * rand(1, 5);
-	console.log('block',block);
+	// console.log('block',block);
 	return block.toFixed(0);
 }
 
@@ -770,7 +771,7 @@ function combat() {
 	// generate a new encounter at random
 	if (player.armed && !inCombat && daysSinceLastAttack > 6) {
 		var x = rand(1, 1000)
-		console.log(x);
+		// console.log(x);
 		if (x > 700) {
 			newEncounter();
 			daysSinceLastAttack = 0;
@@ -804,6 +805,7 @@ function combat() {
 		medpack.total += encounter.loot.medpack;
 		gameLog(encounter.loot.food.toFixed(0) + " food, " + encounter.loot.water.toFixed(0) + " water, " + encounter.loot.ammo.toFixed(0) + " ammo, " + encounter.loot.scrap.toFixed(0) + " scrap, and " + encounter.loot.medpack.toFixed(0) + " medpacks.");
 		gameLog("<em>Found some items on the dead body:</em>");
+		gameLog("<strong>Killed the " + encounter.name + "!</strong>")
 		encounter = '';
 	}
 
