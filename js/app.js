@@ -162,43 +162,43 @@ var gatherSupplies = function() {
 	// so far it's just weapons that will add to your damage.
 	// if you already found that weapon, or you have a better one,
 	// it won't overwrite what you have
-	if(foundItem == rareLoot && daysSurvived > 5) {
+	if (foundItem == rareLoot && daysSurvived > 5) {
 		var rareItem = weightedRand(rareList, rareWeight);
 		// console.log(rareItem);
-		if(rareItem == rareLoot.handgun && player.offense >= 0 && player.offense < 2) {
+		if (rareItem == rareLoot.handgun && player.offense >= 0 && player.offense < 2) {
 			player.offense = rareItem.offense;
 			player.armed = true;
 			gameLog("Found an old handgun!");
-		} else if(rareItem == rareLoot.hunting && player.offense >= 0 && player.offense < 4) {
+		} else if (rareItem == rareLoot.hunting && player.offense >= 0 && player.offense < 4) {
 			player.offense = rareItem.offense;
 			player.armed = true;
 			gameLog("Found a descent looking hunting rifle!");
-		} else if(rareItem == rareLoot.assault && player.armed && player.offense < 8) {
+		} else if (rareItem == rareLoot.assault && player.armed && player.offense < 8) {
 			player.offense = rareItem.offense;
 			player.dangerous = true;
-			gameLog("Found an assault rifle! Oh boy!");			
-		} else if(rareItem == rareLoot.l_armor && player.defense >= 0 && player.defense < 2) {
+			gameLog("Found an assault rifle! Oh boy!");
+		} else if (rareItem == rareLoot.l_armor && player.defense >= 0 && player.defense < 2) {
 			player.defense = rareItem.defense;
 			gameLog("Found some old leather armor.")
-		} else if(rareItem == rareLoot.bp_vest && player.defense >= 0 && player.defense < 5) {
+		} else if (rareItem == rareLoot.bp_vest && player.defense >= 0 && player.defense < 5) {
 			player.defense = rareItem.defense;
 			gameLog("Found a bulletproof vest.")
-		} else if(rareItem == rareLoot.m_armor && player.defense >= 0 && player.defense < 10) {
+		} else if (rareItem == rareLoot.m_armor && player.defense >= 0 && player.defense < 10) {
 			player.defense = rareItem.defense;
 			gameLog("Found some shiny metal armor. Enemies beware!")
-		}else if(rareItem == rareLoot.nothing) {
+		} else if (rareItem == rareLoot.nothing) {
 			gameLog("Found nothing")
 		}
-	// if < 5 days, you get some ammo instead
-	} else if(foundItem == rareLoot && daysSurvived < 5) {
+		// if < 5 days, you get some ammo instead
+	} else if (foundItem == rareLoot && daysSurvived < 5) {
 		console.log('rare :(');
 		foundItem = ammo;
 		foundItem.total++;
 		gameLog("Found " + foundItem.name);
-	// if not rare, regular item
+		// if not rare, regular item
 	} else {
 		foundItem.total++
-		gameLog("Found " + foundItem.name);
+			gameLog("Found " + foundItem.name);
 	}
 
 
@@ -230,7 +230,7 @@ function playerStatsRemoval() {
 // checks if the player is dead and kills the player if able
 function deathCheck() {
 	if (player.health == 0 && !player.gameOver) {
-		if(homeStorage.currentStorage.medpack > (homeStorage.maxStorage.medpack / 2)) {
+		if (homeStorage.currentStorage.medpack > (homeStorage.maxStorage.medpack / 2)) {
 			alert("You manage to stumble blindly home and patch yourself up somehow. ");
 			gameLog("The will to live is strong.")
 			homeStorage.currentStorage.medpack = 0;
@@ -243,53 +243,53 @@ function deathCheck() {
 			player.gameOver = true;
 			resetGame();
 		}
-	} 
+	}
 }
 
 // resets the game 
 function resetGame() {
 	gameLog("You survived " + daysSurvived.toFixed(0) + " days.");
 	gameLog("You clicked " + clicks + " times.")
-		player.health = 100;
-		player.hunger = 0;
-		player.hungry = false;
-		player.starving = false;
-		player.thirst = 0;
-		player.thirsty = false;
-		player.dehydrated = false;
-		player.rads = 10;
-		player.sick = false;
-		player.gameOver = false;
-		player.currentHome = 'none';
-		player.offense = 0;
-		player.defense = 0;
-		player.armed = false;
-		player.dangerous = false;
-		homeStorage.currentStorage.food = 0;
-		homeStorage.currentStorage.water = 0;
-		homeStorage.currentStorage.ammo = 0;
-		homeStorage.currentStorage.scrap = 0;
-		homeStorage.currentStorage.medpack = 0;
-		homeStorage.maxStorage.food = 0;
-		homeStorage.maxStorage.water = 0;
-		homeStorage.maxStorage.ammo = 0;
-		homeStorage.maxStorage.scrap = 0;
-		homeStorage.maxStorage.medpack = 0;
-		buildings[0].isBuilt = false;
-		buildings[1].isBuilt = false;
-		buildings[2].isBuilt = false;
-		upgrades[0].isBuilt = false;
-		upgrades[1].isBuilt = false;
-		upgrades[2].isBuilt = false;
-		food.total = 0;
-		water.total = 0;
-		ammo.total = 0;
-		scrap.total = 0;
-		medpack.total = 0;
-		daysSurvived = 0;
-		daysSinceLastAttack = 0;
-		clicks = 0;
-		gameLog("Game reset.")
+	player.health = 100;
+	player.hunger = 0;
+	player.hungry = false;
+	player.starving = false;
+	player.thirst = 0;
+	player.thirsty = false;
+	player.dehydrated = false;
+	player.rads = 10;
+	player.sick = false;
+	player.gameOver = false;
+	player.currentHome = 'none';
+	player.offense = 0;
+	player.defense = 0;
+	player.armed = false;
+	player.dangerous = false;
+	homeStorage.currentStorage.food = 0;
+	homeStorage.currentStorage.water = 0;
+	homeStorage.currentStorage.ammo = 0;
+	homeStorage.currentStorage.scrap = 0;
+	homeStorage.currentStorage.medpack = 0;
+	homeStorage.maxStorage.food = 0;
+	homeStorage.maxStorage.water = 0;
+	homeStorage.maxStorage.ammo = 0;
+	homeStorage.maxStorage.scrap = 0;
+	homeStorage.maxStorage.medpack = 0;
+	buildings[0].isBuilt = false;
+	buildings[1].isBuilt = false;
+	buildings[2].isBuilt = false;
+	upgrades[0].isBuilt = false;
+	upgrades[1].isBuilt = false;
+	upgrades[2].isBuilt = false;
+	food.total = 0;
+	water.total = 0;
+	ammo.total = 0;
+	scrap.total = 0;
+	medpack.total = 0;
+	daysSurvived = 0;
+	daysSinceLastAttack = 0;
+	clicks = 0;
+	gameLog("Game reset.")
 }
 
 // updates the html with different things
@@ -323,11 +323,11 @@ function updateTotals() {
 	document.getElementById('chest_cost').innerHTML = upgrades[2].cost;
 	document.getElementById('chest_discription').innerHTML = upgrades[2].discription;
 	// Current home
-	if(player.currentHome.name != undefined) {
+	if (player.currentHome.name != undefined) {
 		document.getElementById('current_home').innerHTML = player.currentHome.name;
 		document.getElementById('current_integrity').innerHTML = player.currentHome.currentIntegrity;
 		document.getElementById('max_integrity').innerHTML = player.currentHome.maxIntegrity;
-		if(player.currentHome.currentIntegrity < player.currentHome.maxIntegrity) {
+		if (player.currentHome.currentIntegrity < player.currentHome.maxIntegrity) {
 			document.getElementById('repair_integrity').className = "button";
 		} else {
 			document.getElementById('repair_integrity').className = "hidden";
@@ -504,10 +504,10 @@ function useItem(item) {
 // Build, maintain, and upgrade structures
 // also item storage
 var shelter = {
-	build: function(structure){
-		if(structure.isBuilt) {
+	build: function(structure) {
+		if (structure.isBuilt) {
 			gameLog("You already built a " + structure.name);
-		} else if(structure.cost <= scrap.total) {
+		} else if (structure.cost <= scrap.total) {
 			scrap.total -= structure.cost;
 			structure.isBuilt = true;
 			player.currentHome = structure;
@@ -521,7 +521,7 @@ var shelter = {
 	},
 
 	maintain: function(structure) {
-		if(structure.isBuilt && structure.currentIntegrity < structure.maxIntegrity && scrap.total > (structure.cost / 2)) {
+		if (structure.isBuilt && structure.currentIntegrity < structure.maxIntegrity && scrap.total > (structure.cost / 2)) {
 			scrap.total -= (structure.cost / 2);
 			structure.currentIntegrity = structure.maxIntegrity;
 			gameLog("Completed repairs on " + structure.name + " with integrity of " + structure.currentIntegrity);
@@ -532,10 +532,10 @@ var shelter = {
 	},
 
 	upgrade: function(structure, upgrade) {
-		if(structure.isBuilt && upgrade.isBuilt) {
+		if (structure.isBuilt && upgrade.isBuilt) {
 			gameLog("You already built a " + upgrade.name)
-		} else if(structure.isBuilt && structure.upgrades < structure.upgradeSlots && scrap.total >= upgrade.cost) {
-			if(upgrade.type == 'storage') {
+		} else if (structure.isBuilt && structure.upgrades < structure.upgradeSlots && scrap.total >= upgrade.cost) {
+			if (upgrade.type == 'storage') {
 				scrap.total -= structure.cost;
 				// homeStorage.maxStorage increased by upgrade.maxStorage
 				upgrade.isBuilt = true;
@@ -553,9 +553,9 @@ var shelter = {
 	},
 
 	store: function(item) {
-		if(item.total == 0) {
+		if (item.total == 0) {
 			gameLog("Not enough " + item.name);
-		} else if(homeStorage.currentStorage[item.name] < homeStorage.maxStorage[item.name] && item.total > 0) {
+		} else if (homeStorage.currentStorage[item.name] < homeStorage.maxStorage[item.name] && item.total > 0) {
 			item.total -= 1;
 			homeStorage.currentStorage[item.name] += 1;
 			gameLog("Stored 1 " + item.name);
@@ -574,7 +574,7 @@ function gameLog(message) {
 	} else {
 		// Reset the (xNumber) value
 		logRepeat = 1
-			// Go through all the logs in order, moving them down one and successively overwriting them.
+		// Go through all the logs in order, moving them down one and successively overwriting them.
 		document.getElementById('log9').innerHTML = document.getElementById('log8').innerHTML
 		document.getElementById('log8').innerHTML = document.getElementById('log7').innerHTML
 		document.getElementById('log7').innerHTML = document.getElementById('log6').innerHTML
@@ -583,7 +583,7 @@ function gameLog(message) {
 		document.getElementById('log4').innerHTML = document.getElementById('log3').innerHTML
 		document.getElementById('log3').innerHTML = document.getElementById('log2').innerHTML
 		document.getElementById('log2').innerHTML = document.getElementById('log1').innerHTML
-		// Since ids need to be unique, log1 strips the ids from the log0 elements when copying the contents.
+		// log1 strips the ids from the log0 elements when copying the contents.
 		document.getElementById('log1').innerHTML = '<td>' + document.getElementById('logM').innerHTML + '</td><td>' + document.getElementById('logS').innerHTML + '</td><td>' + document.getElementById('logG').innerHTML + '</td>';
 		// Creates new contents with new message, and x1
 		document.getElementById('log0').innerHTML = '<td id="logM">' + '</td><td id="logS">' + message + '</td><td id="logG">(x' + logRepeat + ')</td>';
@@ -591,9 +591,9 @@ function gameLog(message) {
 }
 
 // Panel selection
-function paneSelect(name){
+function paneSelect(name) {
 	// Called when user switches between the various panes 
-	if (name == 'buildings'){
+	if (name == 'buildings') {
 		document.getElementById("buildingsPane").style.display = "block";
 		document.getElementById("upgradesPane").style.display = "none";
 		document.getElementById("homePane").style.display = "none";
@@ -601,7 +601,7 @@ function paneSelect(name){
 		document.getElementById("selectUpgrades").className = "paneSelector";
 		document.getElementById("selectHome").className = "paneSelector";
 	}
-	if (name == 'upgrades'){
+	if (name == 'upgrades') {
 		document.getElementById("buildingsPane").style.display = "none";
 		document.getElementById("upgradesPane").style.display = "block";
 		document.getElementById("homePane").style.display = "none";
@@ -609,7 +609,7 @@ function paneSelect(name){
 		document.getElementById("selectUpgrades").className = "paneSelector selected";
 		document.getElementById("selectHome").className = "paneSelector";
 	}
-	if (name == 'home'){
+	if (name == 'home') {
 		document.getElementById("buildingsPane").style.display = "none";
 		document.getElementById("upgradesPane").style.display = "none";
 		document.getElementById("homePane").style.display = "block";
@@ -638,26 +638,26 @@ var encounterTypes = [
 	enemies = {
 		'thug': {
 			'name': 'Thug',
-			'offense': 1.0,
-			'defense': 1.5,
+			'offense': 2.0,
+			'defense': 2.5,
 			'chance': 0.3
 		},
 		'vandal': {
 			'name': 'Vandal',
-			'offense': 1.5,
-			'defense': 1.5,
+			'offense': 2.5,
+			'defense': 3.5,
 			'chance': 0.3
 		},
 		'raider': {
 			'name': 'Raider',
-			'offense': 2.0,
-			'defense': 3.0,
+			'offense': 3.0,
+			'defense': 4.0,
 			'chance': 0.2
 		},
 		'mercenary': {
 			'name': 'Mercenary',
-			'offense': 4.0,
-			'defense': 5.0,
+			'offense': 5.0,
+			'defense': 6.0,
 			'chance': 0.2
 		}
 	}
@@ -673,32 +673,32 @@ function Enemy(name, offense, defense) {
 	this.type = 'hostile';
 	this.offense = offense;
 	this.defense = defense;
-	if(offense < 2) {
+	if (offense < 3) {
 		this.health = rand(20, 50).toFixed(0);
 		this.loot = {
-			'food': rand(1,10),
-			'water': rand(1,10),
-			'ammo': rand(1,10),
-			'scrap': rand(1,10),
-			'medpack': rand(1,10)
+			'food': rand(1, 10),
+			'water': rand(1, 10),
+			'ammo': rand(1, 10),
+			'scrap': rand(1, 10),
+			'medpack': rand(1, 10)
 		}
-	} else if(offense < 3) {
+	} else if (offense < 5) {
 		this.health = rand(20, 70).toFixed(0);
 		this.loot = {
-			'food': rand(1,20),
-			'water': rand(1,20),
-			'ammo': rand(1,20),
-			'scrap': rand(1,20),
-			'medpack': rand(1,20)
+			'food': rand(1, 20),
+			'water': rand(1, 20),
+			'ammo': rand(1, 20),
+			'scrap': rand(1, 20),
+			'medpack': rand(1, 20)
 		}
-	} else if(offense < 5) {
+	} else if (offense < 7) {
 		this.health = rand(20, 100).toFixed(0);
 		this.loot = {
-			'food': rand(1,30),
-			'water': rand(1,30),
-			'ammo': rand(1,30),
-			'scrap': rand(1,30),
-			'medpack': rand(1,30)
+			'food': rand(1, 30),
+			'water': rand(1, 30),
+			'ammo': rand(1, 30),
+			'scrap': rand(1, 30),
+			'medpack': rand(1, 30)
 		}
 	}
 }
@@ -707,7 +707,7 @@ function Enemy(name, offense, defense) {
 function newEncounter() {
 	var type = weightedRand(enemiesList, enemiesWeight);
 	// won't generate merc if you haven't found the assault rifle cause he's tough
-	if(type.name == 'Mercenary' && !player.dangerous) {
+	if (type.name == 'Mercenary' && !player.dangerous) {
 		type = weightedRand(enemiesList, enemiesWeight);
 	}
 	encounter = new Enemy(type.name, type.offense, type.defense);
@@ -718,21 +718,21 @@ function newEncounter() {
 }
 
 function attack(attacker) {
-	var damage = attacker.offense * rand(2,5);
+	var damage = attacker.offense * rand(2, 5);
 	// console.log('attack',damage);
 	return damage.toFixed(0);
 }
 
 function defend(defender) {
-	var block = defender.defense * rand(1,5);
+	var block = defender.defense * rand(1, 5);
 	// console.log('block',block);
 	return block.toFixed(0);
 }
 
 function run() {
 	lastAction = 'run';
-	var success = rand(1,100)
-	if(success >= 70) {
+	var success = rand(1, 100)
+	if (success >= 70) {
 		inCombat = false;
 		gameLog("You booked it and ran away from that " + encounter.name);
 		daysSinceLastAttack = 0;
@@ -746,29 +746,31 @@ function fight(attacker, defender) {
 	var atk = attack(attacker);
 	var def = defend(defender);
 	var damage = atk - def;
-	if(damage < 0) {
+	if (damage < 0) {
 		damage = 0;
 	}
-
 	defender.health -= damage;
 	gameLog(attacker.name + " shot " + defender.name + " for " + damage + "!");
 	document.getElementById("enemyHealth").innerHTML = encounter.health;
 }
 
+// the main combat function that runs on the timer
+// checks certain conditions and if met, puts player into combat state
+// also handles the enemy attacks and death
 function combat() {
 	// generate a new encounter at random
-	if(player.armed && !inCombat && daysSinceLastAttack > 6) {
-		var x = rand(1,1000)
+	if (player.armed && !inCombat && daysSinceLastAttack > 6) {
+		var x = rand(1, 1000)
 		console.log(x);
-		if(x > 700) {
+		if (x > 700) {
 			newEncounter();
 			daysSinceLastAttack = 0;
 			gameLog("A " + encounter.name + " attacks you!");
 		}
 	}
 
-	if(lastAction == 'attack' && inCombat) {
-		if(ammo.total > 0) {
+	if (lastAction == 'attack' && inCombat) {
+		if (ammo.total > 0) {
 			fight(player, encounter);
 			useItem(ammo);
 		} else {
@@ -777,13 +779,13 @@ function combat() {
 	}
 
 	// encounter attacks player
-	if((lastAction == 'attack' || lastAction == 'run') && inCombat) {
+	if ((lastAction == 'attack' || lastAction == 'run') && inCombat) {
 		fight(encounter, player);
 		lastAction = 'wait';
 	}
-	
+
 	// when enemy dies, reset encounter, and add loot to inventory.
-	if(encounter.health <= 0) {
+	if (encounter.health <= 0) {
 		inCombat = false;
 		food.total += encounter.loot.food;
 		water.total += encounter.loot.water;
@@ -795,10 +797,10 @@ function combat() {
 		encounter = '';
 	}
 
-	if(inCombat) {
+	if (inCombat) {
 		// reveal combat controls and disable gather button
 		document.getElementById('combat_area').className = " ";
-		document.getElementById('gather_button').disabled = true; 
+		document.getElementById('gather_button').disabled = true;
 	} else {
 		document.getElementById('combat_area').className = "hidden";
 		document.getElementById('gather_button').disabled = false;
@@ -901,7 +903,6 @@ var upgrades = [
 		'isBuilt': false
 	},
 ]
-
 
 
 
