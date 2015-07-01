@@ -21,8 +21,6 @@ var player = {
 	'armed': false,
 	'dangerous': false
 };
-// Asks the player for a name
-player.name = prompt('What is your name', 'Pip')
 var homeStorage = {
 	'maxStorage': {
 		food: 0,
@@ -76,17 +74,17 @@ var nothing = {
 var rareLoot = {
 	handgun: {
 		'name': 'handgun',
-		'offense': 2,
+		'offense': 4,
 		'chance': 0.2
 	},
 	hunting: {
 		'name': 'hunting rifle',
-		'offense': 4,
+		'offense': 6,
 		'chance': 0.1
 	},
 	assault: {
 		'name': 'assault rifle',
-		'offense': 8,
+		'offense': 10,
 		'chance': 0.05
 	},
 	l_armor: {
@@ -101,7 +99,7 @@ var rareLoot = {
 	},
 	m_armor: {
 		'name': 'metal armor',
-		'defense': 10,
+		'defense': 9,
 		'chance': 0.05
 	},
 	nothing: {
@@ -122,6 +120,16 @@ var daysSurvived = 0;
 var daysSinceLastAttack = 0;
 var lastAction = '';
 var encounter = '';
+
+// Asks the player for a name
+player.name = prompt('What is your name', 'Pip')
+// game intro and some instruction
+gameLog("<strong>Good luck!</strong>")
+gameLog("Basically just click the big button and then sometimes the little ones")
+gameLog("Beware of the dangers lurking in the shadows")
+gameLog("You will find many things to help you along the way")
+gameLog("for as long as possible.")
+gameLog("The (current) goal of the game is to survive")
 
 // Generates a random number between min and max.
 var rand = function(min, max) {
@@ -168,24 +176,24 @@ var gatherSupplies = function() {
 		if (rareItem == rareLoot.handgun && player.offense >= 0 && player.offense < 2) {
 			player.offense = rareItem.offense;
 			player.armed = true;
-			gameLog("Found an old handgun!");
+			gameLog("<strong>Found an old handgun!</strong>");
 		} else if (rareItem == rareLoot.hunting && player.offense >= 0 && player.offense < 4) {
 			player.offense = rareItem.offense;
 			player.armed = true;
-			gameLog("Found a descent looking hunting rifle!");
+			gameLog("<strong>Found a descent looking hunting rifle!</strong>");
 		} else if (rareItem == rareLoot.assault && player.armed && player.offense < 8) {
 			player.offense = rareItem.offense;
 			player.dangerous = true;
-			gameLog("Found an assault rifle! Oh boy!");
+			gameLog("<strong>Found an assault rifle! Oh boy!</strong>");
 		} else if (rareItem == rareLoot.l_armor && player.defense >= 0 && player.defense < 2) {
 			player.defense = rareItem.defense;
-			gameLog("Found some old leather armor.")
+			gameLog("<strong>Found some old leather armor.</strong>")
 		} else if (rareItem == rareLoot.bp_vest && player.defense >= 0 && player.defense < 5) {
 			player.defense = rareItem.defense;
-			gameLog("Found a bulletproof vest.")
+			gameLog("<strong>Found a bulletproof vest.</strong>")
 		} else if (rareItem == rareLoot.m_armor && player.defense >= 0 && player.defense < 10) {
 			player.defense = rareItem.defense;
-			gameLog("Found some shiny metal armor. Enemies beware!")
+			gameLog("<strong>Found some shiny metal armor. Enemies beware!</strong>")
 		} else if (rareItem == rareLoot.nothing) {
 			gameLog("Found nothing")
 		}
@@ -232,7 +240,7 @@ function deathCheck() {
 	if (player.health == 0 && !player.gameOver) {
 		if (homeStorage.currentStorage.medpack > (homeStorage.maxStorage.medpack / 2)) {
 			alert("You manage to stumble blindly home and patch yourself up somehow. ");
-			gameLog("The will to live is strong.")
+			gameLog("<strong>The will to live is strong.</strong>")
 			homeStorage.currentStorage.medpack = 0;
 			player.health = 100;
 			player.hunger = 0;
@@ -288,6 +296,7 @@ function resetGame() {
 	medpack.total = 0;
 	daysSurvived = 0;
 	daysSinceLastAttack = 0;
+	inCombat = false;
 	clicks = 0;
 	gameLog("Game reset.")
 }
@@ -638,26 +647,26 @@ var encounterTypes = [
 	enemies = {
 		'thug': {
 			'name': 'Thug',
-			'offense': 2.0,
-			'defense': 2.5,
+			'offense': 4.0,
+			'defense': 2.0,
 			'chance': 0.3
 		},
 		'vandal': {
 			'name': 'Vandal',
-			'offense': 2.5,
-			'defense': 3.5,
+			'offense': 6.5,
+			'defense': 4.5,
 			'chance': 0.3
 		},
 		'raider': {
 			'name': 'Raider',
-			'offense': 3.0,
-			'defense': 4.0,
+			'offense': 8.0,
+			'defense': 6.0,
 			'chance': 0.2
 		},
 		'mercenary': {
 			'name': 'Mercenary',
-			'offense': 5.0,
-			'defense': 6.0,
+			'offense': 10.0,
+			'defense': 9.0,
 			'chance': 0.2
 		}
 	}
@@ -673,7 +682,7 @@ function Enemy(name, offense, defense) {
 	this.type = 'hostile';
 	this.offense = offense;
 	this.defense = defense;
-	if (offense < 3) {
+	if (offense <= 4) {
 		this.health = rand(20, 50).toFixed(0);
 		this.loot = {
 			'food': rand(1, 10),
@@ -682,8 +691,8 @@ function Enemy(name, offense, defense) {
 			'scrap': rand(1, 10),
 			'medpack': rand(1, 10)
 		}
-	} else if (offense < 5) {
-		this.health = rand(20, 70).toFixed(0);
+	} else if (offense <= 8) {
+		this.health = rand(30, 70).toFixed(0);
 		this.loot = {
 			'food': rand(1, 20),
 			'water': rand(1, 20),
@@ -691,8 +700,8 @@ function Enemy(name, offense, defense) {
 			'scrap': rand(1, 20),
 			'medpack': rand(1, 20)
 		}
-	} else if (offense < 7) {
-		this.health = rand(20, 100).toFixed(0);
+	} else if (offense <= 10) {
+		this.health = rand(50, 100).toFixed(0);
 		this.loot = {
 			'food': rand(1, 30),
 			'water': rand(1, 30),
@@ -719,13 +728,13 @@ function newEncounter() {
 
 function attack(attacker) {
 	var damage = attacker.offense * rand(2, 5);
-	// console.log('attack',damage);
+	console.log('attack',damage);
 	return damage.toFixed(0);
 }
 
 function defend(defender) {
 	var block = defender.defense * rand(1, 5);
-	// console.log('block',block);
+	console.log('block',block);
 	return block.toFixed(0);
 }
 
@@ -734,10 +743,10 @@ function run() {
 	var success = rand(1, 100)
 	if (success >= 70) {
 		inCombat = false;
-		gameLog("You booked it and ran away from that " + encounter.name);
+		gameLog("<em>You booked it and ran away from that " + encounter.name + "!</em>");
 		daysSinceLastAttack = 0;
 	} else {
-		gameLog("You tried to run but the " + encounter.name + " gave chase!");
+		gameLog("<em>You tried to run but the " + encounter.name + " gave chase!</em>");
 	}
 }
 
@@ -750,7 +759,7 @@ function fight(attacker, defender) {
 		damage = 0;
 	}
 	defender.health -= damage;
-	gameLog(attacker.name + " shot " + defender.name + " for " + damage + "!");
+	gameLog("<strong>" + attacker.name + " shot " + defender.name + " for " + damage + "!</strong>");
 	document.getElementById("enemyHealth").innerHTML = encounter.health;
 }
 
@@ -765,7 +774,8 @@ function combat() {
 		if (x > 700) {
 			newEncounter();
 			daysSinceLastAttack = 0;
-			gameLog("A " + encounter.name + " attacks you!");
+			lastAction = 'wait';
+			gameLog("<em>A " + encounter.name + " attacks you!</em>");
 		}
 	}
 
@@ -774,7 +784,7 @@ function combat() {
 			fight(player, encounter);
 			useItem(ammo);
 		} else {
-			gameLog("Out of ammo!");
+			gameLog("<em>Out of ammo!</em>");
 		}
 	}
 
@@ -793,7 +803,7 @@ function combat() {
 		scrap.total += encounter.loot.scrap;
 		medpack.total += encounter.loot.medpack;
 		gameLog(encounter.loot.food.toFixed(0) + " food, " + encounter.loot.water.toFixed(0) + " water, " + encounter.loot.ammo.toFixed(0) + " ammo, " + encounter.loot.scrap.toFixed(0) + " scrap, and " + encounter.loot.medpack.toFixed(0) + " medpacks.");
-		gameLog("Found some items on the dead body:");
+		gameLog("<em>Found some items on the dead body:</em>");
 		encounter = '';
 	}
 
