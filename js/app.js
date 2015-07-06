@@ -167,8 +167,7 @@ var gatherSupplies = function() {
 	var foundItem = weightedRand(basicSupplies, weight);
 	// console.log(foundItem);
 	// Rare loot will start showing up after 5 days in-game
-	// so far it's just weapons that will add to your damage.
-	// if you already found that weapon, or you have a better one,
+	// if you already found that item, or you have a better one,
 	// it won't overwrite what you have
 	if (foundItem == rareLoot && daysSurvived > 5) {
 		var rareItem = weightedRand(rareList, rareWeight);
@@ -180,7 +179,7 @@ var gatherSupplies = function() {
 		} else if (rareItem == rareLoot.hunting && player.offense >= 0 && player.offense < 4) {
 			player.offense = rareItem.offense;
 			player.armed = true;
-			gameLog("<strong>Found a descent looking hunting rifle!</strong>");
+			gameLog("<strong>Found a decent looking hunting rifle!</strong>");
 		} else if (rareItem == rareLoot.assault && player.armed && player.offense < 8) {
 			player.offense = rareItem.offense;
 			player.dangerous = true;
@@ -780,6 +779,7 @@ function combat() {
 		}
 	}
 
+	// player attacks encounter
 	if (lastAction == 'attack' && inCombat) {
 		if (ammo.total > 0) {
 			fight(player, encounter);
@@ -809,8 +809,8 @@ function combat() {
 		encounter = '';
 	}
 
+	// reveal combat controls and disable gather button
 	if (inCombat) {
-		// reveal combat controls and disable gather button
 		document.getElementById('combat_area').className = " ";
 		document.getElementById('gather_button').disabled = true;
 	} else {
@@ -924,4 +924,22 @@ function heal() {
 	player.hunger = 0;
 	player.thirst = 0;
 	player.rads = 0;
+}
+
+function arm(lvl) {
+	if(lvl == 1) {
+		ammo.total = 100;
+		player.offense = rareLoot.handgun.offense;
+		player.defense = rareLoot.l_armor.defense;
+	}
+	if(lvl == 2) {
+		ammo.total = 100;
+		player.offense = rareLoot.hunting.offense;
+		player.defense = rareLoot.bp_vest.defense;
+	}
+	if(lvl == 3) {
+		ammo.total = 100;
+		player.offense = rareLoot.assault.offense;
+		player.defense = rareLoot.m_armor.defense;
+	}
 }
