@@ -1,5 +1,7 @@
 # Survival Clicker
 
+http://clicker.bigcat.io/
+
 An incremental game with a post apocalyptic twist
 
 ## Things to add:
