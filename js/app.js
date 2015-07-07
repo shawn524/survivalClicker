@@ -726,18 +726,6 @@ function newEncounter() {
 	return encounter;
 }
 
-function attack(attacker) {
-	var damage = attacker.offense * rand(2, 5);
-	// console.log('attack',damage);
-	return damage.toFixed(0);
-}
-
-function defend(defender) {
-	var block = defender.defense * rand(1, 5);
-	// console.log('block',block);
-	return block.toFixed(0);
-}
-
 function run() {
 	lastAction = 'run';
 	var success = rand(1, 100)
@@ -750,17 +738,16 @@ function run() {
 	}
 }
 
-// takes attack() and defend() as arguments and dukes them out
-function fight(attacker, defender) {
-	var atk = attack(attacker);
-	var def = defend(defender);
-	var damage = atk - def;
-	if (damage < 0) {
-		damage = 0;
-	}
+function fight(attacker,defender) {
+	var attack = function(attacker) {
+		return (attacker.offense * rand(2,5)).toFixed(0);
+	};
+	var defend = function(defender) {
+		return (defender.defense * rand(1,5)).toFixed(0);
+	};
+	var damage = attack(attacker) - defend(defender);
 	defender.health -= damage;
 	gameLog("<strong>" + attacker.name + " shot " + defender.name + " for " + damage + "!</strong>");
-	document.getElementById("enemyHealth").innerHTML = encounter.health;
 }
 
 // the main combat function that runs on the timer
