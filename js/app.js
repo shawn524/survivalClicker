@@ -37,81 +37,100 @@ var homeStorage = {
 		medpack: 0
 	}
 }
-var food = {
-	name: 'food',
-	total: 0,
-	increment: 1,
-	chance: 0.1
-};
-var water = {
-	name: 'water',
-	total: 0,
-	increment: 1,
-	chance: 0.2
-};
-var ammo = {
-	name: 'ammo',
-	total: 0,
-	increment: 1,
-	chance: 0.1
-};
-var scrap = {
-	name: 'scrap',
-	total: 0,
-	increment: 1,
-	chance: 0.2
-};
-var medpack = {
-	name: 'medpack',
-	total: 0,
-	increment: 1,
-	chance: 0.1
-};
-var nothing = {
-	name: 'nothing',
-	chance: 0.3,
-};
-var rareLoot = {
-	handgun: {
-		'name': 'handgun',
-		'offense': 4,
-		'chance': 0.2
+var basicLoot = [
+	{
+		name: 'food',
+		total: 0,
+		increment: 1,
+		chance: 0.1
 	},
-	hunting: {
-		'name': 'hunting rifle',
-		'offense': 6,
-		'chance': 0.1
+	{
+		name: 'water',
+		total: 0,
+		increment: 1,
+		chance: 0.2
 	},
-	assault: {
-		'name': 'assault rifle',
-		'offense': 10,
-		'chance': 0.05
+	{
+		name: 'ammo',
+		total: 0,
+		increment: 1,
+		chance: 0.1
 	},
-	l_armor: {
-		'name': 'leather armor',
-		'defense': 3,
-		'chance': 0.2
+	{
+		name: 'scrap',
+		total: 0,
+		increment: 1,
+		chance: 0.2
 	},
-	bp_vest: {
-		'name': 'bulitproof vest',
-		'defense': 5,
-		'chance': 0.1
+	{
+		name: 'medpack',
+		total: 0,
+		increment: 1,
+		chance: 0.1
 	},
-	m_armor: {
-		'name': 'metal armor',
-		'defense': 9,
-		'chance': 0.05
+	{
+		name: 'nothing',
+		chance: 0.3,
 	},
-	nothing: {
-		'chance': 0.8
+	{
+		name: 'rareLoot',
+		chance: 0.05
+	}
+]
+var rareLoot = [
+	{
+		name: 'handgun',
+		offense: 4,
+		chance: 0.2
 	},
-	chance: 0.05,
+	{
+		name: 'hunting rifle',
+		offense: 6,
+		chance: 0.1
+	},
+	{
+		name: 'assault rifle',
+		offense: 10,
+		chance: 0.05
+	},
+	{
+		name: 'leather armor',
+		defense: 3,
+		chance: 0.2
+	},
+	{
+		name: 'bulletproof vest',
+		defense: 5,
+		chance: 0.1
+	},
+	{
+		name: 'metal armor',
+		defense: 9,
+		chance: 0.05
+	},
+	{
+		name: 'nothing',
+		chance: 0.8
+	},
+]
+
+// function to build the array's used by weightedRand()
+function buildWeight(arr, type) {
+	if(type === 'name') {
+		return arr.map(function(list) {
+			return list.name
+		})
+	} else if(type === 'chance') {
+		return arr.map(function(list) {
+			return list.chance
+		})
+	}
 }
 
-var basicSupplies = [food, water, ammo, scrap, medpack, nothing, rareLoot];
-var weight = [food.chance, water.chance, ammo.chance, scrap.chance, medpack.chance, nothing.chance, rareLoot.chance];
-var rareList = [rareLoot.handgun, rareLoot.hunting, rareLoot.assault, rareLoot.L_armor, rareLoot.bp_vest, rareLoot.M_armor, rareLoot.nothing];
-var rareWeight = [rareLoot.handgun.chance, rareLoot.hunting.chance, rareLoot.assault.chance, rareLoot.l_armor.chance, rareLoot.bp_vest.chance, rareLoot.m_armor.chance, rareLoot.nothing.chance];
+//var basicList = buildWeight(basicLoot, 'name');
+var basicWeight = buildWeight(basicLoot, 'chance');
+//var rareList = buildWeight(rareLoot, 'name');
+var rareWeight = buildWeight(rareLoot, 'chance');
 var inCombat = false;
 var lesserMulti = 1;
 var greaterMulti = 1;
@@ -164,42 +183,42 @@ var weightedRand = function(list, weight) {
 
 // This function is the main click action. 
 var gatherSupplies = function() {
-	var foundItem = weightedRand(basicSupplies, weight);
-	// console.log(foundItem);
+	var foundItem = weightedRand(basicLoot, basicWeight);
+	// console.log(foundItem.name);
 	// Rare loot will start showing up after 5 days in-game
 	// if you already found that item, or you have a better one,
 	// it won't overwrite what you have
-	if (foundItem == rareLoot && daysSurvived > 5) {
-		var rareItem = weightedRand(rareList, rareWeight);
-		// console.log(rareItem);
-		if (rareItem == rareLoot.handgun && player.offense >= 0 && player.offense < 2) {
+	if (foundItem.name == 'rareLoot' && daysSurvived > 5) {
+		var rareItem = weightedRand(rareLoot, rareWeight);
+		console.log(rareItem);
+		if (rareItem == rareLoot[0] && player.offense >= 0 && player.offense < 2) {
 			player.offense = rareItem.offense;
 			player.armed = true;
 			gameLog("<strong>Found an old handgun!</strong>");
-		} else if (rareItem == rareLoot.hunting && player.offense >= 0 && player.offense < 4) {
+		} else if (rareItem == rareLoot[1] && player.offense >= 0 && player.offense < 4) {
 			player.offense = rareItem.offense;
 			player.armed = true;
 			gameLog("<strong>Found a decent looking hunting rifle!</strong>");
-		} else if (rareItem == rareLoot.assault && player.armed && player.offense < 8) {
+		} else if (rareItem == rareLoot[2] && player.armed && player.offense < 8) {
 			player.offense = rareItem.offense;
 			player.dangerous = true;
 			gameLog("<strong>Found an assault rifle! Oh boy!</strong>");
-		} else if (rareItem == rareLoot.l_armor && player.defense >= 0 && player.defense < 2) {
+		} else if (rareItem == rareLoot[3] && player.defense >= 0 && player.defense < 2) {
 			player.defense = rareItem.defense;
 			gameLog("<strong>Found some old leather armor.</strong>")
-		} else if (rareItem == rareLoot.bp_vest && player.defense >= 0 && player.defense < 5) {
+		} else if (rareItem == rareLoot[4] && player.defense >= 0 && player.defense < 5) {
 			player.defense = rareItem.defense;
 			gameLog("<strong>Found a bulletproof vest.</strong>")
-		} else if (rareItem == rareLoot.m_armor && player.defense >= 0 && player.defense < 10) {
+		} else if (rareItem == rareLoot[5] && player.defense >= 0 && player.defense < 10) {
 			player.defense = rareItem.defense;
 			gameLog("<strong>Found some shiny metal armor. Enemies beware!</strong>")
-		} else if (rareItem == rareLoot.nothing) {
+		} else if (rareItem == rareLoot[6]) {
 			gameLog("Found nothing")
 		}
 		// if < 5 days, you get some ammo instead
-	} else if (foundItem == rareLoot && daysSurvived < 5) {
+	} else if (foundItem.name == 'rareLoot' && daysSurvived < 5) {
 		console.log(':(');
-		foundItem = ammo;
+		foundItem = basicLoot[2];
 		foundItem.total++;
 		gameLog("Found " + foundItem.name);
 		// if not rare, regular item
@@ -305,11 +324,11 @@ function resetGame() {
 function updateTotals() {
 	document.getElementById('player_name').innerHTML = player.name;
 	// Supplies
-	document.getElementById('food_count').innerHTML = food.total.toFixed(0);
-	document.getElementById('water_count').innerHTML = water.total.toFixed(0);
-	document.getElementById('ammo_count').innerHTML = ammo.total.toFixed(0);
-	document.getElementById('scrap_metal_count').innerHTML = scrap.total.toFixed(0);
-	document.getElementById('medical_supplies_count').innerHTML = medpack.total.toFixed(0);
+	document.getElementById('food_count').innerHTML = basicLoot[0].total.toFixed(0);
+	document.getElementById('water_count').innerHTML = basicLoot[1].total.toFixed(0);
+	document.getElementById('ammo_count').innerHTML = basicLoot[2].total.toFixed(0);
+	document.getElementById('scrap_metal_count').innerHTML = basicLoot[3].total.toFixed(0);
+	document.getElementById('medical_supplies_count').innerHTML = basicLoot[4].total.toFixed(0);
 	// Attributes
 	document.getElementById('health_count').innerHTML = player.health.toFixed(0);
 	document.getElementById('hunger_count').innerHTML = player.hunger.toFixed(0);
@@ -636,6 +655,8 @@ window.setInterval(function() {
 	applyStatusEffect();
 	deathCheck();
 	combat();
+
+	heal();
 }, 1000);
 
 
