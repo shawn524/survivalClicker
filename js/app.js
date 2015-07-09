@@ -37,98 +37,121 @@ var homeStorage = {
 		medpack: 0
 	}
 }
-var basicLoot = [
+var loot = [
 	{
 		name: 'food',
+		type: 'basic',
 		total: 0,
-		increment: 1,
 		chance: 0.1
 	},
 	{
 		name: 'water',
+		type: 'basic',
 		total: 0,
-		increment: 1,
 		chance: 0.2
 	},
 	{
 		name: 'ammo',
+		type: 'basic',
 		total: 0,
-		increment: 1,
 		chance: 0.1
 	},
 	{
 		name: 'scrap',
+		type: 'basic',
 		total: 0,
-		increment: 1,
 		chance: 0.2
 	},
 	{
 		name: 'medpack',
+		type: 'basic',
 		total: 0,
-		increment: 1,
 		chance: 0.1
 	},
 	{
 		name: 'nothing',
+		type: 'basic',
 		chance: 0.3,
 	},
 	{
 		name: 'rareLoot',
+		type: 'basic',
 		chance: 0.05
-	}
-]
-var rareLoot = [
+	},
 	{
 		name: 'handgun',
+		type: 'rare',
 		offense: 4,
 		chance: 0.2
 	},
 	{
 		name: 'hunting rifle',
+		type: 'rare',
 		offense: 6,
 		chance: 0.1
 	},
 	{
 		name: 'assault rifle',
+		type: 'rare',
 		offense: 10,
 		chance: 0.05
 	},
 	{
 		name: 'leather armor',
+		type: 'rare',
 		defense: 3,
 		chance: 0.2
 	},
 	{
 		name: 'bulletproof vest',
+		type: 'rare',
 		defense: 5,
 		chance: 0.1
 	},
 	{
 		name: 'metal armor',
+		type: 'rare',
 		defense: 9,
 		chance: 0.05
 	},
 	{
 		name: 'nothing',
+		type: 'rare',
 		chance: 0.8
 	},
 ]
 
 // function to build the array's used by weightedRand()
-function buildWeight(arr, type) {
-	if(type === 'name') {
-		return arr.map(function(list) {
-			return list.name
+function buildWeight(arr, quality, value) {
+	if(quality != undefined) {
+		return arr.filter(function(x) {
+			return x.type === quality;
+		}).map(function(list) {
+			if(value === 'name') {
+				return list.name;
+			} else if(value === 'chance') {
+				return list.chance;
+			} else {
+				return list;
+			}
 		})
-	} else if(type === 'chance') {
-		return arr.map(function(list) {
-			return list.chance
-		})
+	} else {
+		if(value === 'name') {
+			return arr.map(function(list) {
+				return list.name
+			})
+		} else if(value === 'chance') {
+			return arr.map(function(list) {
+				return list.chance
+			})
+		}
 	}
 }
 
-var basicWeight = buildWeight(basicLoot, 'chance');
-var rareWeight = buildWeight(rareLoot, 'chance');
+var basicList = 	buildWeight(loot, 'basic', '')
+var basicWeight = 	buildWeight(loot, 'basic', 'chance');
+var rareList =		buildWeight(loot, 'rare', '')
+var rareWeight = 	buildWeight(loot, 'rare', 'chance');
 var inCombat = false;
 var lesserMulti = 1;
 var greaterMulti = 1;
@@ -181,36 +204,36 @@ var weightedRand = function(list, weight) {
 
 // This function is the main click action. 
 var gatherSupplies = function() {
-	var foundItem = weightedRand(basicLoot, basicWeight);
-	// console.log(foundItem.name);
+	var foundItem = weightedRand(basicList, basicWeight);
+	console.log(foundItem);
 	// Rare loot will start showing up after 5 days in-game
 	// if you already found that item, or you have a better one,
 	// it won't overwrite what you have
 	if (foundItem.name == 'rareLoot' && daysSurvived > 5) {
-		var rareItem = weightedRand(rareLoot, rareWeight);
+		var rareItem = weightedRand(rareList, rareWeight);
 		console.log(rareItem);
-		if (rareItem == rareLoot[0] && player.offense >= 0 && player.offense < 2) {
+		if (rareItem == rareList[0] && player.offense >= 0 && player.offense < 2) {
 			player.offense = rareItem.offense;
 			player.armed = true;
 			gameLog("<strong>Found an old handgun!</strong>");
-		} else if (rareItem == rareLoot[1] && player.offense >= 0 && player.offense < 4) {
+		} else if (rareItem == rareList[1] && player.offense >= 0 && player.offense < 4) {
 			player.offense = rareItem.offense;
 			player.armed = true;
 			gameLog("<strong>Found a decent looking hunting rifle!</strong>");
-		} else if (rareItem == rareLoot[2] && player.armed && player.offense < 8) {
+		} else if (rareItem == rareList[2] && player.armed && player.offense < 8) {
 			player.offense = rareItem.offense;
 			player.dangerous = true;
 			gameLog("<strong>Found an assault rifle! Oh boy!</strong>");
-		} else if (rareItem == rareLoot[3] && player.defense >= 0 && player.defense < 2) {
+		} else if (rareItem == rareList[3] && player.defense >= 0 && player.defense < 2) {
 			player.defense = rareItem.defense;
 			gameLog("<strong>Found some old leather armor.</strong>")
-		} else if (rareItem == rareLoot[4] && player.defense >= 0 && player.defense < 5) {
+		} else if (rareItem == rareList[4] && player.defense >= 0 && player.defense < 5) {
 			player.defense = rareItem.defense;
 			gameLog("<strong>Found a bulletproof vest.</strong>")
-		} else if (rareItem == rareLoot[5] && player.defense >= 0 && player.defense < 10) {
+		} else if (rareItem == rareList[5] && player.defense >= 0 && player.defense < 10) {
 			player.defense = rareItem.defense;
 			gameLog("<strong>Found some shiny metal armor. Enemies beware!</strong>")
-		} else if (rareItem == rareLoot[6]) {
+		} else if (rareItem == rareList[6]) {
 			gameLog("Found nothing")
 		}
 		// if < 5 days, you get some ammo instead
@@ -305,11 +328,11 @@ function resetGame() {
 	upgrades[0].isBuilt = false;
 	upgrades[1].isBuilt = false;
 	upgrades[2].isBuilt = false;
-	food.total = 0;
-	water.total = 0;
-	ammo.total = 0;
-	scrap.total = 0;
-	medpack.total = 0;
+	loot[0].total = 0;
+	loot[1].total = 0;
+	loot[2].total = 0;
+	loot[3].total = 0;
+	loot[4].total = 0;
 	daysSurvived = 0;
 	daysSinceLastAttack = 0;
 	inCombat = false;
@@ -322,11 +345,11 @@ function resetGame() {
 function updateTotals() {
 	document.getElementById('player_name').innerHTML = player.name;
 	// Supplies
-	document.getElementById('food_count').innerHTML = basicLoot[0].total.toFixed(0);
-	document.getElementById('water_count').innerHTML = basicLoot[1].total.toFixed(0);
-	document.getElementById('ammo_count').innerHTML = basicLoot[2].total.toFixed(0);
-	document.getElementById('scrap_metal_count').innerHTML = basicLoot[3].total.toFixed(0);
-	document.getElementById('medical_supplies_count').innerHTML = basicLoot[4].total.toFixed(0);
+	document.getElementById('food_count').innerHTML = loot[0].total.toFixed(0);
+	document.getElementById('water_count').innerHTML = loot[1].total.toFixed(0);
+	document.getElementById('ammo_count').innerHTML = loot[2].total.toFixed(0);
+	document.getElementById('scrap_metal_count').innerHTML = loot[3].total.toFixed(0);
+	document.getElementById('medical_supplies_count').innerHTML = loot[4].total.toFixed(0);
 	// Attributes
 	document.getElementById('health_count').innerHTML = player.health.toFixed(0);
 	document.getElementById('hunger_count').innerHTML = player.hunger.toFixed(0);
@@ -533,26 +556,26 @@ var shelter = {
 	build: function(structure) {
 		if (structure.isBuilt) {
 			gameLog("You already built a " + structure.name);
-		} else if (structure.cost <= scrap.total) {
-			scrap.total -= structure.cost;
+		} else if (structure.cost <= loot[3].total) {
+			loot[3].total -= structure.cost;
 			structure.isBuilt = true;
 			player.currentHome = structure;
 			// Initial building integrity is a random value between max and 10 less then max, rounded down.
 			structure.currentIntegrity = Math.floor(rand((structure.maxIntegrity - 10), structure.maxIntegrity)).toFixed(0)
 			gameLog("Completed building " + structure.name + " with integrity of " + structure.currentIntegrity);
 		} else {
-			var needed = structure.cost - scrap.total;
+			var needed = structure.cost - loot[3].total;
 			gameLog("Not enough scrap. Need " + needed + " more.");
 		};
 	},
 
 	maintain: function(structure) {
-		if (structure.isBuilt && structure.currentIntegrity < structure.maxIntegrity && scrap.total > (structure.cost / 2)) {
-			scrap.total -= (structure.cost / 2);
+		if (structure.isBuilt && structure.currentIntegrity < structure.maxIntegrity && loot[3].total > (structure.cost / 2)) {
+			loot[3].total -= (structure.cost / 2);
 			structure.currentIntegrity = structure.maxIntegrity;
 			gameLog("Completed repairs on " + structure.name + " with integrity of " + structure.currentIntegrity);
 		} else {
-			var needed = (structure.cost / 2) - scrap.total;
+			var needed = (structure.cost / 2) - loot[3].total;
 			gameLog("Not enough scrap. Need " + needed + " more.");
 		};
 	},
@@ -560,9 +583,9 @@ var shelter = {
 	upgrade: function(structure, upgrade) {
 		if (structure.isBuilt && upgrade.isBuilt) {
 			gameLog("You already built a " + upgrade.name)
-		} else if (structure.isBuilt && structure.upgrades < structure.upgradeSlots && scrap.total >= upgrade.cost) {
+		} else if (structure.isBuilt && structure.upgrades < structure.upgradeSlots && loot[3].total >= upgrade.cost) {
 			if (upgrade.type == 'storage') {
-				scrap.total -= structure.cost;
+				loot[3].total -= structure.cost;
 				// homeStorage.maxStorage increased by upgrade.maxStorage
 				upgrade.isBuilt = true;
 				homeStorage.maxStorage.food = upgrade.maxStorage.food;
@@ -572,7 +595,7 @@ var shelter = {
 				homeStorage.maxStorage.medpack = upgrade.maxStorage.medpack;
 				gameLog("Built a " + upgrade.name + " in your " + structure.name);
 			} else {
-				var needed = upgrade.cost - scrap.total;
+				var needed = upgrade.cost - loot[3].total;
 				gameLog("Not enough scrap. Need " + needed + " more.");
 			}
 		}
@@ -654,7 +677,7 @@ window.setInterval(function() {
 	deathCheck();
 	combat();
 
-	heal();
+	// heal();
 }, 1000);
 
 
@@ -691,7 +714,7 @@ var enemies = [
 
 
 // var enemiesList = [enemies[0].thug, enemies[0].vandal, enemies[0].raider, enemies[0].mercenary];
-var enemiesWeight = buildWeight(enemies, 'chance');
+var enemiesWeight = buildWeight(enemies, undefined, 'chance');
 
 // Enemy constructor
 function Enemy(name, offense, defense) {
@@ -763,8 +786,12 @@ function fight(attacker,defender) {
 		return (defender.defense * rand(1,5)).toFixed(0);
 	};
 	var damage = attack(attacker) - defend(defender);
+	if(damage < 0) {
+		damage = 0;
+	}
 	defender.health -= damage;
 	gameLog("<strong>" + attacker.name + " shot " + defender.name + " for " + damage + "!</strong>");
+	document.getElementById("enemyHealth").innerHTML = encounter.health;
 }
 
 // the main combat function that runs on the timer
@@ -785,9 +812,9 @@ function combat() {
 
 	// player attacks encounter
 	if (lastAction == 'attack' && inCombat) {
-		if (ammo.total > 0) {
+		if (loot[2].total > 0) {
 			fight(player, encounter);
-			useItem(ammo);
+			useItem(loot[2]);
 		} else {
 			gameLog("<em>Out of ammo!</em>");
 		}
@@ -802,11 +829,11 @@ function combat() {
 	// when enemy dies, reset encounter, and add loot to inventory.
 	if (encounter.health <= 0) {
 		inCombat = false;
-		basicLoot[0].total += encounter.loot.food;
-		basicLoot[1].total += encounter.loot.water;
-		basicLoot[2].total += encounter.loot.ammo;
-		basicLoot[3].total += encounter.loot.scrap;
-		basicLoot[4].total += encounter.loot.medpack;
+		loot[0].total += encounter.loot.food;
+		loot[1].total += encounter.loot.water;
+		loot[2].total += encounter.loot.ammo;
+		loot[3].total += encounter.loot.scrap;
+		loot[4].total += encounter.loot.medpack;
 		gameLog(encounter.loot.food.toFixed(0) + " food, " + encounter.loot.water.toFixed(0) + " water, " + encounter.loot.ammo.toFixed(0) + " ammo, " + encounter.loot.scrap.toFixed(0) + " scrap, and " + encounter.loot.medpack.toFixed(0) + " medpacks.");
 		gameLog("<em>Found some items on the dead body:</em>");
 		gameLog("<strong>Killed the " + encounter.name + "!</strong>")
@@ -931,19 +958,17 @@ function heal() {
 }
 
 function arm(lvl) {
+	loot[2].total = 100;
 	if(lvl == 1) {
-		ammo.total = 100;
-		player.offense = rareLoot.handgun.offense;
-		player.defense = rareLoot.l_armor.defense;
+		player.offense = rareList[0].offense;
+		player.defense = rareList[3].defense;
 	}
 	if(lvl == 2) {
-		ammo.total = 100;
-		player.offense = rareLoot.hunting.offense;
-		player.defense = rareLoot.bp_vest.defense;
+		player.offense = rareList[1].offense;
+		player.defense = rareList[4].defense;
 	}
 	if(lvl == 3) {
-		ammo.total = 100;
-		player.offense = rareLoot.assault.offense;
-		player.defense = rareLoot.m_armor.defense;
+		player.offense = rareList[2].offense;
+		player.defense = rareList[5].defense;
 	}
 }
