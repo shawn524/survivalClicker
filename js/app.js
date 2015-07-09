@@ -121,7 +121,9 @@ var loot = [
 	},
 ]
 
+/*====================================================================================================*/
 // function to build the array's used by weightedRand()
+// uses MAP and FILTER
 function buildWeight(arr, quality, value) {
 	if(quality != undefined) {
 		return arr.filter(function(x) {
@@ -147,7 +149,7 @@ function buildWeight(arr, quality, value) {
 		}
 	}
 }
-
+/*====================================================================================================*/
 var basicList = 	buildWeight(loot, 'basic', '')
 var basicWeight = 	buildWeight(loot, 'basic', 'chance');
 var rareList =		buildWeight(loot, 'rare', '')
