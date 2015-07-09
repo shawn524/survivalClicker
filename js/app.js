@@ -127,9 +127,7 @@ function buildWeight(arr, type) {
 	}
 }
 
-//var basicList = buildWeight(basicLoot, 'name');
 var basicWeight = buildWeight(basicLoot, 'chance');
-//var rareList = buildWeight(rareLoot, 'name');
 var rareWeight = buildWeight(rareLoot, 'chance');
 var inCombat = false;
 var lesserMulti = 1;
@@ -664,38 +662,36 @@ window.setInterval(function() {
 // Enemies and combat
 
 // enemy types
-var encounterTypes = [
-	enemies = {
-		'thug': {
-			'name': 'Thug',
-			'offense': 4.0,
-			'defense': 2.0,
-			'chance': 0.3
+var enemies = [
+		{
+			name: 'Thug',
+			offense: 4.0,
+			defense: 2.0,
+			chance: 0.3
 		},
-		'vandal': {
-			'name': 'Vandal',
-			'offense': 6.5,
-			'defense': 4.5,
-			'chance': 0.3
+		{
+			name: 'Vandal',
+			offense: 6.5,
+			defense: 4.5,
+			chance: 0.3
 		},
-		'raider': {
-			'name': 'Raider',
-			'offense': 8.0,
-			'defense': 6.0,
-			'chance': 0.2
+		{
+			name: 'Raider',
+			offense: 8.0,
+			defense: 6.0,
+			chance: 0.2
 		},
-		'mercenary': {
-			'name': 'Mercenary',
-			'offense': 10.0,
-			'defense': 9.0,
-			'chance': 0.2
+		{
+			name: 'Mercenary',
+			offense: 10.0,
+			defense: 9.0,
+			chance: 0.2
 		}
-	}
 ]
 
 
-var enemiesList = [encounterTypes[0].thug, encounterTypes[0].vandal, encounterTypes[0].raider, encounterTypes[0].mercenary];
-var enemiesWeight = [encounterTypes[0].thug.chance, encounterTypes[0].vandal.chance, encounterTypes[0].raider.chance, encounterTypes[0].mercenary.chance];
+// var enemiesList = [enemies[0].thug, enemies[0].vandal, enemies[0].raider, enemies[0].mercenary];
+var enemiesWeight = buildWeight(enemies, 'chance');
 
 // Enemy constructor
 function Enemy(name, offense, defense) {
@@ -735,10 +731,10 @@ function Enemy(name, offense, defense) {
 
 // generates new encounter and puts game into combat state
 function newEncounter() {
-	var type = weightedRand(enemiesList, enemiesWeight);
+	var type = weightedRand(enemies, enemiesWeight);
 	// won't generate merc if you haven't found the assault rifle cause he's tough
 	if (type.name == 'Mercenary' && !player.dangerous) {
-		type = weightedRand(enemiesList, enemiesWeight);
+		type = weightedRand(enemies, enemiesWeight);
 	}
 	encounter = new Enemy(type.name, type.offense, type.defense);
 	document.getElementById("enemyHealth").innerHTML = encounter.health;
@@ -806,11 +802,11 @@ function combat() {
 	// when enemy dies, reset encounter, and add loot to inventory.
 	if (encounter.health <= 0) {
 		inCombat = false;
-		food.total += encounter.loot.food;
-		water.total += encounter.loot.water;
-		ammo.total += encounter.loot.ammo;
-		scrap.total += encounter.loot.scrap;
-		medpack.total += encounter.loot.medpack;
+		basicLoot[0].total += encounter.loot.food;
+		basicLoot[1].total += encounter.loot.water;
+		basicLoot[2].total += encounter.loot.ammo;
+		basicLoot[3].total += encounter.loot.scrap;
+		basicLoot[4].total += encounter.loot.medpack;
 		gameLog(encounter.loot.food.toFixed(0) + " food, " + encounter.loot.water.toFixed(0) + " water, " + encounter.loot.ammo.toFixed(0) + " ammo, " + encounter.loot.scrap.toFixed(0) + " scrap, and " + encounter.loot.medpack.toFixed(0) + " medpacks.");
 		gameLog("<em>Found some items on the dead body:</em>");
 		gameLog("<strong>Killed the " + encounter.name + "!</strong>")
